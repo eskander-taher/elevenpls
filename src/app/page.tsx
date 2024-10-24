@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { BackgroundGradientAnimation } from "@/components/ui/background";
 import { LampDemo } from "@/components/ui/lamp";
 
