@@ -69,12 +69,12 @@ const CreativeServices: React.FC = () => {
 					<span className="mr-2 text-pink-500 font-bold">خدماتنا الإبداعية</span>
 					<span className="font-thin">our Creative services</span>
 				</h1>
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ">
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
 					{services.map((service, index) => (
 						<Link
 							href="#"
 							key={index}
-							className="relative group  block p-2 h-full w-full"
+							className="relative group  block  h-full w-full"
 							onMouseEnter={() => setHoveredIndex(index)}
 							onMouseLeave={() => setHoveredIndex(null)}
 						>
@@ -95,7 +95,7 @@ const CreativeServices: React.FC = () => {
 									/>
 								)}
 							</AnimatePresence>
-							<CardSpotlight className="h-full w-96 pl-10">
+							<CardSpotlight className="h-full w-80 pl-10">
 								<p className="text-xl font-bold relative z-20 text-white">{service.title}</p>
 								<div className="text-neutral-200 mt-4 relative z-20">
 									<ul>
