@@ -1,7 +1,27 @@
 "use client";
+import React from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
+import Image from "next/image";
+
+export default function creativeServicesSection() {
+	return (
+		<div className="flex min-h-screen justify-center heroBackgroundImage">
+			<div className="flex items-end overflow-hidden">
+				<Image
+					className="relative hand-float hidden xl:block -bottom-20"
+					src="/06.png"
+					width={300}
+					height={0}
+					alt="hand"
+				/>
+				<CreativeServices />
+			</div>
+		</div>
+	);
+}
+
 
 import { CardSpotlight } from "@/components/ui/card-spotlight";
 
@@ -9,6 +29,7 @@ const services = [
 	{
 		title: "Creation & Design",
 		items: ["Concept creation", "Naming", "Art direction", "Logo design", "Logo animation", "3D Product design"],
+		link: "branding"
 	},
 	{
 		title: "Brand Strategy",
@@ -20,14 +41,17 @@ const services = [
 			"Tone of voice",
 			"Brand story & message",
 		],
+		link: "#branding"
 	},
 	{
 		title: "Brand Analysis",
 		items: ["Brand background", "Target markets", "Target audience", "Competitor analysis", "SWOT analysis"],
+		link: "branding"
 	},
 	{
 		title: "Implementation",
 		items: ["Stationery", "Packaging", "Uniform", "Digital template"],
+		link: "branding"
 	},
 	{
 		title: "Marketing",
@@ -41,22 +65,27 @@ const services = [
 			"Marketing event stands",
 			"Social media posters",
 		],
+		link: "branding"
 	},
 	{
 		title: "Video & Editing",
 		items: ["Video production", "Video animation", "Motion graphic"],
+		link: "branding"
 	},
 	{
 		title: "Grid & Layout",
 		items: ["Book design", "Magazine design", "Company profile", "Brochure", "Typography poster", "Catalogue"],
+		link: "branding"
 	},
 	{
 		title: "UI/UX and web",
 		items: ["Wireframing", "Application Design", "Website Design", "Scoring"],
+		link: "branding"
 	},
 	{
 		title: "Photography",
 		items: ["Portraits", "Corporate Photography", "Food Photography", "Product Photography"],
+		link: "branding"
 	},
 ];
 
@@ -72,7 +101,7 @@ const CreativeServices: React.FC = () => {
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
 					{services.map((service, index) => (
 						<Link
-							href="#"
+							href={service.link!}
 							key={index}
 							className="relative group  block  h-full w-full"
 							onMouseEnter={() => setHoveredIndex(index)}
@@ -134,6 +163,3 @@ const CheckIcon = () => {
 		</svg>
 	);
 };
-
-
-export default CreativeServices;
