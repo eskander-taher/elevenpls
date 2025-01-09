@@ -19,3 +19,51 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* *************************************** */
+/* hero background image starts */
+/* *************************************** */
+.heroBackgroundImage {
+  background-image: url('/03.png');
+  background-size: cover;
+  background-position: right;
+  background-repeat: no-repeat;
+}
+
+/* Adjustments for tablets */
+@media (max-width: 768px) {
+  .heroBackgroundImage {
+    background-position: top;
+  }
+}
+
+/* Adjustments for mobile phones */
+@media (max-width: 480px) {
+  .heroBackgroundImage {
+    background-image: url('/03.png');
+  }
+}
+
+.heroBackgroundImage {
+  background-image: url('/03.png');
+  background-size: cover;
+  background-position: right;
+  background-repeat: no-repeat;
+}
+
+/* Adjustments for tablets */
+@media (max-width: 768px) {
+  .heroBackgroundImage {
+    background-position: top;
+  }
+}
+
+/* Adjustments for mobile phones */
+@media (max-width: 480px) {
+  .heroBackgroundImage {
+    background-image: url('/03.png');
+  }
+}
+/* *************************************** */
+/* hero background image ends */
+/* *************************************** */

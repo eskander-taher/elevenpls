@@ -1,21 +1,15 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { IBM_Plex_Sans_Arabic } from "next/font/google";
 import "./globals.css";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
+	weight: ["100", "200", "300", "400", "500", "600", "700"],
+	subsets: ["arabic", "latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Eleven Plus",
-  description: "Your best marketing agency",
+	title: "elevenplus",
+	description: "Your best marketing agency.",
 };
 
 export default function RootLayout({
@@ -24,12 +18,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
+		<html lang="en">
+			<body className={`${ibmPlexSansArabic.className} antialiased`}>{children}</body>
+		</html>
   );
 }
