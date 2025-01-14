@@ -1,13 +1,14 @@
 "use client";
 import Image from "next/image";
 import anime from "animejs";
+import { useEffect } from "react";
 
 const WaterDropGrid = () => {
 	return (
 		<div className="relative h-screen grid place-content-center black px-8 py-12 overflow-hidden">
 			<div className="max-w-2xl mx-auto p-4 flex flex-col justify-center items-center">
 				<div className="flex gap-5 justify-center">
-					<Image src="/logo_with_bg.png" width={100} height={100} alt="logo" className="z-10"/>
+					<Image src="/logo_with_bg.png" width={100} height={100} alt="logo" className="z-10" />
 					<h1 className="relative z-10 text-7xl text-white pb-6 text-center font-bold">eleven+</h1>
 				</div>
 				<p className="text-white max-w-lg mx-auto my-2 text-sm text-center relative z-10">
@@ -31,7 +32,7 @@ const GRID_WIDTH = 30;
 const GRID_HEIGHT = 40;
 
 const DotGrid = () => {
-	const handleDotClick = (e: any) => {
+	const handleDotClick = (index) => {
 		anime({
 			targets: ".dot-point",
 			scale: [
@@ -48,10 +49,17 @@ const DotGrid = () => {
 			],
 			delay: anime.stagger(100, {
 				grid: [GRID_WIDTH, GRID_HEIGHT],
-				from: e.target.dataset.index,
+				from: index,
 			}),
 		});
 	};
+
+	useEffect(() => {
+		setTimeout(() => {
+			const randomIndex = Math.floor(Math.random() * (GRID_WIDTH * GRID_HEIGHT));
+			handleDotClick(randomIndex);
+		}, 5000);
+	}, []);
 
 	const dots = [];
 	let index = 0;
@@ -75,7 +83,7 @@ const DotGrid = () => {
 	}
 
 	return (
-		<div onClick={handleDotClick} style={{ gridTemplateColumns: `repeat(${GRID_WIDTH}, 1fr)` }} className="grid w-fit">
+		<div style={{ gridTemplateColumns: `repeat(${GRID_WIDTH}, 1fr)` }} className="grid w-fit">
 			{dots}
 		</div>
 	);
