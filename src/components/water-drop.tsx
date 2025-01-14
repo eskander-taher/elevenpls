@@ -58,7 +58,7 @@ const DotGrid = () => {
 		setTimeout(() => {
 			const randomIndex = Math.floor(Math.random() * (GRID_WIDTH * GRID_HEIGHT));
 			handleDotClick(randomIndex);
-		}, 5000);
+		}, 3000);
 	}, []);
 
 	const dots = [];
