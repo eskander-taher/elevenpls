@@ -9,6 +9,8 @@ import UiuxDesign from "./components/UiuxDesign";
 import MotionGraphics from "./components/MotionGraphics";
 
 import BackgroundBeams from "@/components/background-beams";
+import { BackgroundBeamsWithCollisionDemo } from "@/components/BackgroundBeamsWithCollisionDemo";
+import WaterDropGrid from "@/components/water-drop";
 
 export default function Home() {
 	return (
@@ -20,7 +22,13 @@ export default function Home() {
 			<UiuxDesign />
 			<MotionGraphics />
 			<ContentDevelopment /> */}
-			<BackgroundBeams />
+			<div className=" block sm:hidden">
+				<WaterDropGrid />
+			</div>
+
+			<div className=" hidden sm:block">
+				<BackgroundBeams />
+			</div>
 			{/* <CreativeServicesSection /> */}
 		</>
 	);
