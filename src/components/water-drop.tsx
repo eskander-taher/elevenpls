@@ -32,7 +32,7 @@ const GRID_WIDTH = 30;
 const GRID_HEIGHT = 40;
 
 const DotGrid = () => {
-	const handleDotClick = (index:any) => {
+	const handleDotClickAuto = (index: any) => {
 		anime({
 			targets: ".dot-point",
 			scale: [
@@ -57,9 +57,31 @@ const DotGrid = () => {
 	useEffect(() => {
 		setTimeout(() => {
 			const randomIndex = Math.floor(Math.random() * (GRID_WIDTH * GRID_HEIGHT));
-			handleDotClick(randomIndex);
+			handleDotClickAuto(randomIndex);
 		}, 3000);
 	}, []);
+
+	const handleDotClick = (e: any) => {
+		anime({
+			targets: ".dot-point",
+			scale: [
+				{ value: 1.35, easing: "easeOutSine", duration: 250 },
+				{ value: 1, easing: "easeInOutQuad", duration: 500 },
+			],
+			translateY: [
+				{ value: -15, easing: "easeOutSine", duration: 250 },
+				{ value: 0, easing: "easeInOutQuad", duration: 500 },
+			],
+			opacity: [
+				{ value: 1, easing: "easeOutSine", duration: 250 },
+				{ value: 0.5, easing: "easeInOutQuad", duration: 500 },
+			],
+			delay: anime.stagger(100, {
+				grid: [GRID_WIDTH, GRID_HEIGHT],
+				from: e.target.dataset.index,
+			}),
+		});
+	};
 
 	const dots = [];
 	let index = 0;
@@ -83,10 +105,11 @@ const DotGrid = () => {
 	}
 
 	return (
-		<div style={{ gridTemplateColumns: `repeat(${GRID_WIDTH}, 1fr)` }} className="grid w-fit">
+		<div onClick={handleDotClick} style={{ gridTemplateColumns: `repeat(${GRID_WIDTH}, 1fr)` }} className="grid w-fit">
 			{dots}
 		</div>
 	);
 };
 
 export default WaterDropGrid;
+
