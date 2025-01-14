@@ -8,17 +8,20 @@ import DigitalDesign from "./components/DigitalDesign";
 import UiuxDesign from "./components/UiuxDesign";
 import MotionGraphics from "./components/MotionGraphics";
 
+import BackgroundBeams from "@/components/background-beams";
+
 export default function Home() {
 	return (
 		<>
-			<CreativeServicesSection />
-			<ScopeManSection />
+			{/* <ScopeManSection />
 			<Branding />
 			<DigitalDesign />
 			<DigitalMarketing />
 			<UiuxDesign />
 			<MotionGraphics />
-			<ContentDevelopment />
+			<ContentDevelopment /> */}
+			<BackgroundBeams />
+			<CreativeServicesSection />
 		</>
 	);
 }

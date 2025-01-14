@@ -7,7 +7,7 @@ import Image from "next/image";
 
 export default function creativeServicesSection() {
 	return (
-		<div className="flex min-h-screen justify-center heroBackgroundImage">
+		<div className="flex min-h-screen justify-center">
 			<div className="flex items-end overflow-hidden">
 				<Image
 					className="relative hand-float hidden xl:block -bottom-20"
@@ -100,8 +100,8 @@ const CreativeServices: React.FC = () => {
 				</h1>
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
 					{services.map((service, index) => (
-						<Link
-							href={service.link!}
+						<div
+							
 							key={index}
 							className="relative group  block  h-full w-full"
 							onMouseEnter={() => setHoveredIndex(index)}
@@ -136,7 +136,7 @@ const CreativeServices: React.FC = () => {
 									</ul>
 								</div>
 							</CardSpotlight>
-						</Link>
+						</div>
 					))}
 				</div>
 			</div>
