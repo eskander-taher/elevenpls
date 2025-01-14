@@ -12,13 +12,12 @@ export default function BackgroundBeamsDemo() {
 					إنضم لقائمة الإنتظار
 				</h1>
 				<p className="text-neutral-500 max-w-lg mx-auto my-2 text-sm text-center relative z-10">
-					الموقع تحت الصيانة في الوقت الحالي, يمكنكم ترك ايميلكم في الاسفل وسيتم التواصل معكم
+					الموقع تحت الصيانة في الوقت الحالي, يمكنكم التواصل عبر الايميل في الاسفل
 				</p>
-				<input
-					type="text"
-					placeholder="info@elevenpls.com"
-					className=" text-center rounded-lg border border-neutral-800 focus:ring-2 focus:ring-teal-500  w-full relative z-10 mt-4  bg-neutral-950 placeholder:text-neutral-700"
-				/>
+				<p className="text-center rounded-lg border border-neutral-800 focus:ring-2 focus:ring-teal-500  w-full relative z-10 mt-4  bg-neutral-950 placeholder:text-neutral-700">
+					info@elevenpls.com
+				</p>
+				
 			</div>
 			<BackgroundBeams />
 		</div>
