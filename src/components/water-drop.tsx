@@ -8,9 +8,7 @@ const WaterDropGrid = () => {
 			<div className="max-w-2xl mx-auto p-4 flex flex-col justify-center items-center">
 				<div className="flex gap-5 justify-center">
 					<Image src="/logo_with_bg.png" width={100} height={100} alt="logo" />
-					<h1 className="relative z-10 text-7xl  bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 pb-6 to-neutral-600  text-center font-sans font-bold">
-						eleven+
-					</h1>
+					<h1 className="relative z-10 text-7xl text-white pb-6 text-center font-bold">eleven+</h1>
 				</div>
 				<p className="text-white max-w-lg mx-auto my-2 text-sm text-center relative z-10">
 					The website is currently under maintenance. You can contact us via the email provided below.
