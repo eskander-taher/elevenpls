@@ -20,7 +20,7 @@ const WaterDropGrid = () => {
 					info@elevenpls.com
 				</p>
 			</div>
-			<div className=" absolute">
+			<div className=" absolute opacity-50">
 				<DotGrid />
 			</div>
 		</div>
