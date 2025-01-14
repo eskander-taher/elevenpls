@@ -11,6 +11,7 @@
   "dependencies": {
     "@react-three/fiber": "^9.0.0-alpha.8",
     "@tabler/icons-react": "^3.28.1",
+    "@types/animejs": "^3.1.12",
     "@types/three": "^0.172.0",
     "animejs": "^3.2.2",
     "clsx": "^2.1.1",
