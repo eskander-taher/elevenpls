@@ -21,7 +21,7 @@ export default function Home() {
 			<MotionGraphics />
 			<ContentDevelopment /> */}
 			<BackgroundBeams />
-			<CreativeServicesSection />
+			{/* <CreativeServicesSection /> */}
 		</>
 	);
 }
