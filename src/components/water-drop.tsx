@@ -33,7 +33,7 @@ const GRID_WIDTH = 30;
 const GRID_HEIGHT = 40;
 
 const DotGrid = () => {
-	const handleDotClick = (e) => {
+	const handleDotClick = (e: any) => {
 		anime({
 			targets: ".dot-point",
 			scale: [
