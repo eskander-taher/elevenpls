@@ -11,7 +11,7 @@ const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
 
 export const metadata: Metadata = {
 	title: "elevenplus",
-	description: "Your best marketing agency.",
+	description: "Your best marketing agency in Saudi Arabia.",
 };
 
 export default function RootLayout({
