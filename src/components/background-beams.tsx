@@ -12,7 +12,7 @@ export default function BackgroundBeamsDemo() {
 					
 				</div>
 				<p className="text-neutral-500 max-w-lg mx-auto my-2 text-sm text-center relative z-10">
-					The website is currently under maintenance. You can contact us via email.
+					The website is currently under maintenance. Please contact us via email.
 				</p>
 				<p dir="rtl" className="text-neutral-500 max-w-lg mx-auto my-2 text-sm text-center relative z-10">
 					الموقع تحت الصيانة في الوقت الحالي, يمكنكم التواصل عبر الايميل.

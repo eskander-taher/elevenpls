@@ -11,7 +11,7 @@ const WaterDropGrid = () => {
 					<Image src="/logo_with_bg.png" width={100} height={100} alt="logo" className=" z-50" />
 				</div>
 				<p className="text-neutral-500 max-w-lg mx-auto my-2 text-sm text-center relative z-10">
-					The website is currently under maintenance. You can contact us via the email.
+					The website is currently under maintenance. Please contact us via the email.
 				</p>
 				<p dir="rtl" className="text-neutral-500 max-w-lg mx-auto my-2 text-sm text-center relative z-10">
 					الموقع تحت الصيانة في الوقت الحالي, يمكنكم التواصل عبر الايميل.
