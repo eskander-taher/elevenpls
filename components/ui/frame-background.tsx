@@ -129,11 +129,10 @@ export function FrameAnimate({
   );
 }
 
-const TOTAL_IMAGE_FRAMES = 231; // Actual image frames available
+const TOTAL_IMAGE_FRAMES = 146; // Actual image frames available (reduced from 231)
 const VIRTUAL_TOTAL_FRAMES = 400; // Virtual frames for animations (can be any number)
-const AUTO_PLAY_FRAMES = 171;
-const FPS = 60;
-const SCROLL_LOCK_DURATION = 3000; // 3 seconds
+const AUTO_PLAY_FRAMES = 86; // Reduced from 171 (half)
+const FPS = 23; // 1.5x faster (was 15)
 
 function getFramePath(frameNumber: number): string {
 	const paddedNumber = frameNumber.toString().padStart(4, "0");
@@ -262,23 +261,19 @@ export function FrameBackground({ children }: { children: React.ReactNode }) {
 		};
 	}, [imagesLoaded, drawFrame]);
 
-	// Lock scroll for 6 seconds
+	// Lock scroll until auto-play completes (frame 86)
 	useEffect(() => {
-		if (!imagesLoaded) return;
-
-		// Disable scrolling initially
-		document.body.style.overflow = "hidden";
-
-		const timeout = setTimeout(() => {
+		if (autoPlayComplete) {
 			setIsScrollLocked(false);
 			document.body.style.overflow = "";
-		}, SCROLL_LOCK_DURATION);
+		} else {
+			document.body.style.overflow = "hidden";
+		}
 
 		return () => {
-			clearTimeout(timeout);
 			document.body.style.overflow = "";
 		};
-	}, [imagesLoaded]);
+	}, [autoPlayComplete]);
 
 	// Handle scroll-based animation for frames 172+ (virtual frames beyond 231)
 	useEffect(() => {
