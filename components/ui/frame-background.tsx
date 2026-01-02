@@ -134,342 +134,249 @@ const VIRTUAL_TOTAL_FRAMES = 400; // Virtual frames for animations (can be any n
 const AUTO_PLAY_FRAMES = 171;
 const FPS = 30;
 const SCROLL_LOCK_DURATION = 6000; // 6 seconds
-const INITIAL_FRAMES_TO_LOAD = 30; // Load first 30 frames before starting
 
 function getFramePath(frameNumber: number): string {
-  const paddedNumber = frameNumber.toString().padStart(4, "0");
-  return `/frames/frame_${paddedNumber}.jpg`;
-}
-
-// Helper to load a single image
-function loadImage(frameNumber: number): Promise<HTMLImageElement> {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => resolve(img);
-    img.onerror = reject;
-    img.src = getFramePath(frameNumber);
-  });
+	const paddedNumber = frameNumber.toString().padStart(4, "0");
+	return `/frames/frame_${paddedNumber}.jpg`;
 }
 
 export function FrameBackground({ children }: { children: React.ReactNode }) {
-  const [currentFrame, setCurrentFrame] = useState(1);
-  const [isScrollLocked, setIsScrollLocked] = useState(true);
-  const [initialLoaded, setInitialLoaded] = useState(false); // First 30 frames loaded
-  const [allLoaded, setAllLoaded] = useState(false); // All frames loaded
-  const [loadProgress, setLoadProgress] = useState(0); // 0-100
-  const [autoPlayComplete, setAutoPlayComplete] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const imagesRef = useRef<(HTMLImageElement | null)[]>(new Array(TOTAL_IMAGE_FRAMES).fill(null));
-  const animationFrameRef = useRef<number | null>(null);
-  const lastFrameTimeRef = useRef<number>(0);
-  const currentFrameRef = useRef<number>(1);
+	const [currentFrame, setCurrentFrame] = useState(1);
+	const [isScrollLocked, setIsScrollLocked] = useState(true);
+	const [imagesLoaded, setImagesLoaded] = useState(false);
+	const [autoPlayComplete, setAutoPlayComplete] = useState(false);
+	const containerRef = useRef<HTMLDivElement>(null);
+	const canvasRef = useRef<HTMLCanvasElement>(null);
+	const imagesRef = useRef<HTMLImageElement[]>([]);
+	const animationFrameRef = useRef<number | null>(null);
+	const lastFrameTimeRef = useRef<number>(0);
+	const currentFrameRef = useRef<number>(1);
 
-  // Force scroll to top on page load/refresh
-  useEffect(() => {
-    window.history.scrollRestoration = "manual";
-    window.scrollTo(0, 0);
-  }, []);
+	// Force scroll to top on page load/refresh
+	useEffect(() => {
+		window.history.scrollRestoration = "manual";
+		window.scrollTo(0, 0);
+	}, []);
 
-  // Progressive image loading
-  useEffect(() => {
-    let isCancelled = false;
-    let loadedCount = 0;
+	// Preload all images (only actual image frames, not virtual)
+	useEffect(() => {
+		const loadImages = async () => {
+			const imagePromises: Promise<HTMLImageElement>[] = [];
 
-    const updateProgress = () => {
-      if (!isCancelled) {
-        setLoadProgress(Math.round((loadedCount / TOTAL_IMAGE_FRAMES) * 100));
-      }
-    };
+			for (let i = 1; i <= TOTAL_IMAGE_FRAMES; i++) {
+				const promise = new Promise<HTMLImageElement>((resolve, reject) => {
+					const img = new Image();
+					img.onload = () => resolve(img);
+					img.onerror = reject;
+					img.src = getFramePath(i);
+				});
+				imagePromises.push(promise);
+			}
 
-    const loadImages = async () => {
-      // Phase 1: Load first 30 frames (for initial auto-play)
-      const initialPromises = [];
-      for (let i = 1; i <= INITIAL_FRAMES_TO_LOAD; i++) {
-        initialPromises.push(
-          loadImage(i).then((img) => {
-            imagesRef.current[i - 1] = img;
-            loadedCount++;
-            updateProgress();
-            return img;
-          })
-        );
-      }
+			try {
+				const loadedImages = await Promise.all(imagePromises);
+				imagesRef.current = loadedImages;
+				setImagesLoaded(true);
+			} catch (error) {
+				console.error("Failed to load images:", error);
+			}
+		};
 
-      try {
-        await Promise.all(initialPromises);
-        if (!isCancelled) {
-          setInitialLoaded(true);
-        }
+		loadImages();
+	}, []);
 
-        // Phase 2: Load remaining frames in background
-        for (let i = INITIAL_FRAMES_TO_LOAD + 1; i <= TOTAL_IMAGE_FRAMES; i++) {
-          if (isCancelled) break;
-          
-          try {
-            const img = await loadImage(i);
-            imagesRef.current[i - 1] = img;
-            loadedCount++;
-            updateProgress();
-          } catch (error) {
-            console.error(`Failed to load frame ${i}:`, error);
-          }
-        }
+	// Draw current frame on canvas (caps at last available image)
+	const drawFrame = useCallback((frameNumber: number) => {
+		const canvas = canvasRef.current;
+		const ctx = canvas?.getContext("2d");
+		// Cap at last available image frame
+		const actualFrame = Math.min(frameNumber, TOTAL_IMAGE_FRAMES);
+		const image = imagesRef.current[actualFrame - 1];
 
-        if (!isCancelled) {
-          setAllLoaded(true);
-        }
-      } catch (error) {
-        console.error("Failed to load initial images:", error);
-      }
-    };
+		if (!canvas || !ctx || !image) return;
 
-    loadImages();
+		// Set canvas size to match window
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
 
-    return () => {
-      isCancelled = true;
-    };
-  }, []);
+		// Calculate dimensions to cover the canvas (like background-size: cover)
+		const imgRatio = image.width / image.height;
+		const canvasRatio = canvas.width / canvas.height;
 
-  // Draw current frame on canvas (caps at last available image)
-  const drawFrame = useCallback((frameNumber: number) => {
-    const canvas = canvasRef.current;
-    const ctx = canvas?.getContext("2d");
-    // Cap at last available image frame
-    const actualFrame = Math.min(frameNumber, TOTAL_IMAGE_FRAMES);
-    const image = imagesRef.current[actualFrame - 1];
+		let drawWidth, drawHeight, offsetX, offsetY;
 
-    // If image not loaded yet, try to draw the closest loaded frame
-    if (!canvas || !ctx) return;
-    if (!image) {
-      // Find the closest loaded frame
-      for (let i = actualFrame - 1; i >= 0; i--) {
-        if (imagesRef.current[i]) {
-          ctx.drawImage(imagesRef.current[i]!, 0, 0, canvas.width, canvas.height);
-          return;
-        }
-      }
-      return;
-    }
+		if (canvasRatio > imgRatio) {
+			drawWidth = canvas.width;
+			drawHeight = canvas.width / imgRatio;
+			offsetX = 0;
+			offsetY = (canvas.height - drawHeight) / 2;
+		} else {
+			drawHeight = canvas.height;
+			drawWidth = canvas.height * imgRatio;
+			offsetX = (canvas.width - drawWidth) / 2;
+			offsetY = 0;
+		}
 
-    // Set canvas size to match window
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+		ctx.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
+	}, []);
 
-    // Calculate dimensions to cover the canvas (like background-size: cover)
-    const imgRatio = image.width / image.height;
-    const canvasRatio = canvas.width / canvas.height;
+	// Auto-play first 171 frames at 30fps
+	useEffect(() => {
+		if (!imagesLoaded) return;
 
-    let drawWidth, drawHeight, offsetX, offsetY;
+		const frameInterval = 1000 / FPS;
+		let frame = 1;
 
-    if (canvasRatio > imgRatio) {
-      drawWidth = canvas.width;
-      drawHeight = canvas.width / imgRatio;
-      offsetX = 0;
-      offsetY = (canvas.height - drawHeight) / 2;
-    } else {
-      drawHeight = canvas.height;
-      drawWidth = canvas.height * imgRatio;
-      offsetX = (canvas.width - drawWidth) / 2;
-      offsetY = 0;
-    }
+		const animate = (timestamp: number) => {
+			if (!lastFrameTimeRef.current) {
+				lastFrameTimeRef.current = timestamp;
+			}
 
-    ctx.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
-  }, []);
+			const elapsed = timestamp - lastFrameTimeRef.current;
 
-  // Auto-play first 171 frames at 30fps (starts after initial 30 frames loaded)
-  useEffect(() => {
-    if (!initialLoaded) return;
+			if (elapsed >= frameInterval) {
+				lastFrameTimeRef.current = timestamp - (elapsed % frameInterval);
+				frame++;
 
-    const frameInterval = 1000 / FPS;
-    let frame = 1;
+				if (frame <= AUTO_PLAY_FRAMES) {
+					currentFrameRef.current = frame;
+					setCurrentFrame(frame);
+					drawFrame(frame);
+				} else {
+					setAutoPlayComplete(true);
+					return;
+				}
+			}
 
-    const animate = (timestamp: number) => {
-      if (!lastFrameTimeRef.current) {
-        lastFrameTimeRef.current = timestamp;
-      }
+			animationFrameRef.current = requestAnimationFrame(animate);
+		};
 
-      const elapsed = timestamp - lastFrameTimeRef.current;
+		// Start with frame 1
+		drawFrame(1);
+		animationFrameRef.current = requestAnimationFrame(animate);
 
-      if (elapsed >= frameInterval) {
-        lastFrameTimeRef.current = timestamp - (elapsed % frameInterval);
-        frame++;
+		return () => {
+			if (animationFrameRef.current) {
+				cancelAnimationFrame(animationFrameRef.current);
+			}
+		};
+	}, [imagesLoaded, drawFrame]);
 
-        if (frame <= AUTO_PLAY_FRAMES) {
-          currentFrameRef.current = frame;
-          setCurrentFrame(frame);
-          drawFrame(frame);
-        } else {
-          setAutoPlayComplete(true);
-          return;
-        }
-      }
+	// Lock scroll for 6 seconds
+	useEffect(() => {
+		if (!imagesLoaded) return;
 
-      animationFrameRef.current = requestAnimationFrame(animate);
-    };
+		// Disable scrolling initially
+		document.body.style.overflow = "hidden";
 
-    // Start with frame 1
-    drawFrame(1);
-    animationFrameRef.current = requestAnimationFrame(animate);
+		const timeout = setTimeout(() => {
+			setIsScrollLocked(false);
+			document.body.style.overflow = "";
+		}, SCROLL_LOCK_DURATION);
 
-    return () => {
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
-    };
-  }, [initialLoaded, drawFrame]);
+		return () => {
+			clearTimeout(timeout);
+			document.body.style.overflow = "";
+		};
+	}, [imagesLoaded]);
 
-  // Lock scroll for 6 seconds
-  useEffect(() => {
-    if (!initialLoaded) return;
+	// Handle scroll-based animation for frames 172+ (virtual frames beyond 231)
+	useEffect(() => {
+		if (isScrollLocked || !autoPlayComplete) return;
 
-    // Disable scrolling initially
-    document.body.style.overflow = "hidden";
+		const handleScroll = () => {
+			const scrollTop = window.scrollY;
+			const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
 
-    const timeout = setTimeout(() => {
-      setIsScrollLocked(false);
-      document.body.style.overflow = "";
-    }, SCROLL_LOCK_DURATION);
+			if (scrollHeight <= 0) {
+				if (currentFrameRef.current !== AUTO_PLAY_FRAMES) {
+					currentFrameRef.current = AUTO_PLAY_FRAMES;
+					setCurrentFrame(AUTO_PLAY_FRAMES);
+					drawFrame(AUTO_PLAY_FRAMES);
+				}
+				return;
+			}
 
-    return () => {
-      clearTimeout(timeout);
-      document.body.style.overflow = "";
-    };
-  }, [initialLoaded]);
+			const scrollProgress = Math.min(scrollTop / scrollHeight, 1);
+			// Use virtual total for animations (can exceed actual image count)
+			const scrollFrameCount = VIRTUAL_TOTAL_FRAMES - AUTO_PLAY_FRAMES;
 
-  // Handle scroll-based animation for frames 172+ (virtual frames beyond 231)
-  useEffect(() => {
-    if (isScrollLocked || !autoPlayComplete) return;
+			// Calculate virtual frame (can go beyond actual image frames)
+			const frameInScrollRange = Math.floor(scrollProgress * scrollFrameCount);
+			const virtualFrame = AUTO_PLAY_FRAMES + frameInScrollRange;
 
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-      
-      if (scrollHeight <= 0) {
-        if (currentFrameRef.current !== AUTO_PLAY_FRAMES) {
-          currentFrameRef.current = AUTO_PLAY_FRAMES;
-          setCurrentFrame(AUTO_PLAY_FRAMES);
-          drawFrame(AUTO_PLAY_FRAMES);
-        }
-        return;
-      }
+			// Ensure we show at least frame 171 when at top
+			const finalFrame =
+				scrollTop === 0 ? AUTO_PLAY_FRAMES : Math.max(virtualFrame, AUTO_PLAY_FRAMES);
 
-      const scrollProgress = Math.min(scrollTop / scrollHeight, 1);
-      // Use virtual total for animations (can exceed actual image count)
-      const scrollFrameCount = VIRTUAL_TOTAL_FRAMES - AUTO_PLAY_FRAMES;
-      
-      // Calculate virtual frame (can go beyond actual image frames)
-      const frameInScrollRange = Math.floor(scrollProgress * scrollFrameCount);
-      const virtualFrame = AUTO_PLAY_FRAMES + frameInScrollRange;
+			if (finalFrame !== currentFrameRef.current) {
+				currentFrameRef.current = finalFrame;
+				setCurrentFrame(finalFrame);
+				// drawFrame will cap at TOTAL_IMAGE_FRAMES automatically
+				drawFrame(finalFrame);
+			}
+		};
 
-      // Ensure we show at least frame 171 when at top
-      const finalFrame = scrollTop === 0 ? AUTO_PLAY_FRAMES : Math.max(virtualFrame, AUTO_PLAY_FRAMES);
+		// Initial draw at frame 171 (only once when effect first runs)
+		currentFrameRef.current = AUTO_PLAY_FRAMES;
+		setCurrentFrame(AUTO_PLAY_FRAMES);
+		drawFrame(AUTO_PLAY_FRAMES);
 
-      if (finalFrame !== currentFrameRef.current) {
-        currentFrameRef.current = finalFrame;
-        setCurrentFrame(finalFrame);
-        // drawFrame will cap at TOTAL_IMAGE_FRAMES automatically
-        drawFrame(finalFrame);
-      }
-    };
+		window.addEventListener("scroll", handleScroll, { passive: true });
+		return () => window.removeEventListener("scroll", handleScroll);
+	}, [isScrollLocked, autoPlayComplete, drawFrame]);
 
-    // Initial draw at frame 171 (only once when effect first runs)
-    currentFrameRef.current = AUTO_PLAY_FRAMES;
-    setCurrentFrame(AUTO_PLAY_FRAMES);
-    drawFrame(AUTO_PLAY_FRAMES);
+	// Handle window resize
+	useEffect(() => {
+		const handleResize = () => {
+			drawFrame(currentFrameRef.current);
+		};
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [isScrollLocked, autoPlayComplete, drawFrame]);
+		window.addEventListener("resize", handleResize);
+		return () => window.removeEventListener("resize", handleResize);
+	}, [drawFrame]);
 
-  // Handle window resize
-  useEffect(() => {
-    const handleResize = () => {
-      drawFrame(currentFrameRef.current);
-    };
+	return (
+		<FrameContext.Provider
+			value={{
+				currentFrame,
+				totalFrames: VIRTUAL_TOTAL_FRAMES,
+				isLoading: !imagesLoaded,
+				isScrollLocked,
+			}}
+		>
+			<div ref={containerRef} className="relative">
+				{/* Fixed background canvas */}
+				<canvas
+					ref={canvasRef}
+					className="fixed inset-0 w-full h-full -z-10"
+					style={{
+						backgroundColor: "#000",
+						opacity: imagesLoaded ? 1 : 0,
+						transition: "opacity 0.3s ease-in-out",
+					}}
+				/>
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [drawFrame]);
+				{/* Loading overlay */}
+				{!imagesLoaded && (
+					<div className="fixed inset-0 z-50 flex items-center justify-center bg-black">
+						<div className="flex flex-col items-center gap-4">
+							<div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin" />
+							<span className="text-white/60 text-sm tracking-wider">Loading...</span>
+						</div>
+					</div>
+				)}
 
-  return (
-    <FrameContext.Provider
-      value={{
-        currentFrame,
-        totalFrames: VIRTUAL_TOTAL_FRAMES,
-        isLoading: !initialLoaded,
-        isScrollLocked,
-      }}
-    >
-      <div ref={containerRef} className="relative">
-        {/* Fixed background canvas */}
-        <canvas
-          ref={canvasRef}
-          className="fixed inset-0 w-full h-full -z-10"
-          style={{ 
-            backgroundColor: "#000",
-            opacity: initialLoaded ? 1 : 0,
-            transition: "opacity 0.3s ease-in-out"
-          }}
-        />
-        
-        {/* Loading overlay with progress */}
-        {!initialLoaded && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black">
-            <div className="flex flex-col items-center gap-6">
-              {/* Progress ring */}
-              <div className="relative w-20 h-20">
-                <svg className="w-20 h-20 -rotate-90" viewBox="0 0 80 80">
-                  {/* Background circle */}
-                  <circle
-                    cx="40"
-                    cy="40"
-                    r="36"
-                    fill="none"
-                    stroke="rgba(255,255,255,0.1)"
-                    strokeWidth="4"
-                  />
-                  {/* Progress circle */}
-                  <circle
-                    cx="40"
-                    cy="40"
-                    r="36"
-                    fill="none"
-                    stroke="url(#progressGradient)"
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                    strokeDasharray={`${2 * Math.PI * 36}`}
-                    strokeDashoffset={`${2 * Math.PI * 36 * (1 - loadProgress / 100)}`}
-                    style={{ transition: "stroke-dashoffset 0.2s ease-out" }}
-                  />
-                  <defs>
-                    <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#ff69b4" />
-                      <stop offset="100%" stopColor="#ff1493" />
-                    </linearGradient>
-                  </defs>
-                </svg>
-                {/* Percentage text */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">{loadProgress}%</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Debug: Frame counter */}
-        {/* <div className="fixed top-4 right-4 z-[9999] bg-black/80 text-white px-4 py-2 rounded-lg font-mono text-sm">
+				{/* Debug: Frame counter */}
+				{/* <div className="fixed top-4 right-4 z-[9999] bg-black/80 text-white px-4 py-2 rounded-lg font-mono text-sm">
           <div>Frame: <span className="text-green-400 font-bold">{currentFrame}</span></div>
           <div className="text-white/50 text-xs">Images: {TOTAL_IMAGE_FRAMES} | Virtual: {VIRTUAL_TOTAL_FRAMES}</div>
         </div> */}
-        
-        {/* Content */}
-        <div className="relative z-0">
-          {children}
-        </div>
-      </div>
-    </FrameContext.Provider>
-  );
+
+				{/* Content */}
+				<div className="relative z-0">{children}</div>
+			</div>
+		</FrameContext.Provider>
+	);
 }
 
