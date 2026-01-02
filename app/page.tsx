@@ -1,6 +1,6 @@
 import { CometCardStack, type CardItem } from "@/components/ui/comet-card-stack";
 import { FrameBackground, FrameAnimate } from "@/components/ui/frame-background";
-import { HiOutlineLightBulb } from "react-icons/hi";
+import { HiOutlineLightBulb, HiMenuAlt3 } from "react-icons/hi";
 import { BsGraphUpArrow } from "react-icons/bs";
 import { IoColorPaletteOutline } from "react-icons/io5";
 import { FiRefreshCw } from "react-icons/fi";
@@ -17,8 +17,98 @@ const cards: CardItem[] = [
 export default function Home() {
 	return (
 		<main>
-			<div className="h-[400vh]">
+			<div className="h-[350vh]">
 				<FrameBackground>
+					{/* Hero Section - fades out before WHY 11+? */}
+					<FrameAnimate
+						startFrame={180}
+						endFrame={210}
+						startOpacity={1}
+						endOpacity={0}
+						startBlur={0}
+						endBlur={5}
+						className="fixed inset-0 z-50"
+					>
+						{/* Header / Navigation - slides down */}
+						<FrameAnimate
+							startFrame={20}
+							endFrame={50}
+							startY={-60}
+							endY={0}
+							startOpacity={0}
+							endOpacity={1}
+							className="fixed top-0 left-0 right-0 z-50"
+						>
+							<header className="px-6 py-5 flex items-center justify-between">
+								{/* Logo */}
+								<div className="flex items-center gap-1">
+									<span className="text-2xl md:text-3xl font-bold text-white">
+										11
+									</span>
+									<span className="text-2xl md:text-3xl font-bold text-pink-400">
+										+
+									</span>
+								</div>
+
+								{/* Right side: CTA + Hamburger */}
+								<div className="flex items-center gap-4">
+									<button className="hidden sm:block px-5 py-2.5 bg-white text-black text-sm font-medium rounded-full hover:bg-pink-100 transition-colors">
+										Start your success
+									</button>
+									<button className="p-2 text-pink-400 hover:text-pink-300 transition-colors">
+										<HiMenuAlt3 className="w-7 h-7" />
+									</button>
+								</div>
+							</header>
+						</FrameAnimate>
+
+						{/* Hero Content - Centered */}
+						<div className="fixed inset-0 flex flex-col items-center justify-center pt-16">
+							{/* Big Text - fades in and scales up */}
+							<FrameAnimate
+								startFrame={40}
+								endFrame={90}
+								startScale={0.8}
+								endScale={1}
+								startOpacity={0}
+								endOpacity={1}
+								startY={30}
+								endY={0}
+							>
+								<h1
+									className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tighter text-center leading-tight bg-clip-text text-transparent drop-shadow-[0_2px_30px_rgba(0,0,0,0.3)] py-2"
+									style={{
+										backgroundImage:
+											"linear-gradient(to right, white 10%, #ff69b4 40%, #ff1493 100%)",
+									}}
+								>
+									CLOSER SUCCESS
+								</h1>
+							</FrameAnimate>
+
+							{/* Description - fades in after title */}
+							<FrameAnimate
+								startFrame={80}
+								endFrame={120}
+								startOpacity={0}
+								endOpacity={1}
+								startY={20}
+								endY={0}
+							>
+								<p
+									className="mt-6 md:mt-8 text-white text-sm md:text-base lg:text-lg text-center max-w-md md:max-w-lg leading-relaxed"
+									style={{
+										textShadow:
+											"0 2px 10px rgba(0,0,0,0.5), 0 0 30px rgba(0,0,0,0.3)",
+									}}
+								>
+									Your strategic partner in digital transformation. We turn
+									ambitious visions into measurable success.
+								</p>
+							</FrameAnimate>
+						</div>
+					</FrameAnimate>
+
 					{/* Wrapper to fade out all WHY 11+? section from frame 320 */}
 					<FrameAnimate
 						startFrame={300}
