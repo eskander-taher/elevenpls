@@ -17,12 +17,12 @@ const cards: CardItem[] = [
 export default function Home() {
 	return (
 		<main>
-			<div className="h-[350vh]">
+			<div className="h-[200vh]">
 				<FrameBackground>
 					{/* Hero Section - fades out before WHY 11+? */}
 					<FrameAnimate
-						startFrame={180}
-						endFrame={210}
+						startFrame={95}
+						endFrame={120}
 						startOpacity={1}
 						endOpacity={0}
 						startBlur={0}
@@ -31,8 +31,8 @@ export default function Home() {
 					>
 						{/* Header / Navigation - slides down */}
 						<FrameAnimate
-							startFrame={20}
-							endFrame={50}
+							startFrame={10}
+							endFrame={25}
 							startY={-60}
 							endY={0}
 							startOpacity={0}
@@ -66,8 +66,8 @@ export default function Home() {
 						<div className="fixed inset-0 flex flex-col items-center justify-center pt-16">
 							{/* Big Text - fades in and scales up */}
 							<FrameAnimate
-								startFrame={40}
-								endFrame={90}
+								startFrame={20}
+								endFrame={45}
 								startScale={0.8}
 								endScale={1}
 								startOpacity={0}
@@ -88,8 +88,8 @@ export default function Home() {
 
 							{/* Description - fades in after title */}
 							<FrameAnimate
-								startFrame={80}
-								endFrame={120}
+								startFrame={40}
+								endFrame={60}
 								startOpacity={0}
 								endOpacity={1}
 								startY={20}
@@ -109,10 +109,10 @@ export default function Home() {
 						</div>
 					</FrameAnimate>
 
-					{/* Wrapper to fade out all WHY 11+? section from frame 320 */}
+					{/* Wrapper to fade out all WHY 11+? section */}
 					<FrameAnimate
-						startFrame={300}
-						endFrame={320}
+						startFrame={215}
+						endFrame={235}
 						startOpacity={1}
 						endOpacity={0}
 						startBlur={0}
@@ -121,8 +121,8 @@ export default function Home() {
 					>
 						{/* Fixed text that scales from small to large */}
 						<FrameAnimate
-							startFrame={215}
-							endFrame={235}
+							startFrame={130}
+							endFrame={150}
 							startScale={0.3}
 							endScale={1}
 							startOpacity={0}
@@ -142,8 +142,8 @@ export default function Home() {
 
 						{/* Text 1 - Upper Left area */}
 						<FrameAnimate
-							startFrame={235}
-							endFrame={260}
+							startFrame={150}
+							endFrame={175}
 							startY={400}
 							endY={0}
 							startScale={0.7}
@@ -161,8 +161,8 @@ export default function Home() {
 
 						{/* Text 2 - Upper Right area (slightly lower) */}
 						<FrameAnimate
-							startFrame={245}
-							endFrame={280}
+							startFrame={160}
+							endFrame={185}
 							startY={400}
 							endY={0}
 							startScale={0.7}
@@ -180,8 +180,8 @@ export default function Home() {
 
 						{/* Text 3 - Lower Left area */}
 						<FrameAnimate
-							startFrame={255}
-							endFrame={300}
+							startFrame={170}
+							endFrame={200}
 							startY={400}
 							endY={0}
 							startScale={0.7}
@@ -199,8 +199,8 @@ export default function Home() {
 
 						{/* Text 4 - Lower Right area (slightly higher) */}
 						<FrameAnimate
-							startFrame={265}
-							endFrame={300}
+							startFrame={180}
+							endFrame={210}
 							startY={400}
 							endY={0}
 							startScale={0.7}
