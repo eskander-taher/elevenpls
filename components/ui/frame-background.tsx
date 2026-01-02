@@ -137,7 +137,7 @@ const SCROLL_LOCK_DURATION = 6000; // 6 seconds
 
 function getFramePath(frameNumber: number): string {
 	const paddedNumber = frameNumber.toString().padStart(4, "0");
-	return `/frames/frame_${paddedNumber}.jpg`;
+	return `/frames/frame_${paddedNumber}.webp`;
 }
 
 export function FrameBackground({ children }: { children: React.ReactNode }) {
@@ -362,7 +362,6 @@ export function FrameBackground({ children }: { children: React.ReactNode }) {
 					<div className="fixed inset-0 z-50 flex items-center justify-center bg-black">
 						<div className="flex flex-col items-center gap-4">
 							<div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin" />
-							<span className="text-white/60 text-sm tracking-wider">Loading...</span>
 						</div>
 					</div>
 				)}
