@@ -132,8 +132,8 @@ export function FrameAnimate({
 const TOTAL_IMAGE_FRAMES = 231; // Actual image frames available
 const VIRTUAL_TOTAL_FRAMES = 400; // Virtual frames for animations (can be any number)
 const AUTO_PLAY_FRAMES = 171;
-const FPS = 30;
-const SCROLL_LOCK_DURATION = 6000; // 6 seconds
+const FPS = 60;
+const SCROLL_LOCK_DURATION = 3000; // 3 seconds
 
 function getFramePath(frameNumber: number): string {
 	const paddedNumber = frameNumber.toString().padStart(4, "0");
