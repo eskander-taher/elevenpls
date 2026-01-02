@@ -367,10 +367,10 @@ export function FrameBackground({ children }: { children: React.ReactNode }) {
         )}
 
         {/* Debug: Frame counter */}
-        {/* <div className="fixed top-4 right-4 z-[9999] bg-black/80 text-white px-4 py-2 rounded-lg font-mono text-sm">
+        <div className="fixed top-4 right-4 z-[9999] bg-black/80 text-white px-4 py-2 rounded-lg font-mono text-sm">
           <div>Frame: <span className="text-green-400 font-bold">{currentFrame}</span></div>
           <div className="text-white/50 text-xs">Images: {TOTAL_IMAGE_FRAMES} | Virtual: {VIRTUAL_TOTAL_FRAMES}</div>
-        </div> */}
+        </div>
         
         {/* Content */}
         <div className="relative z-0">
