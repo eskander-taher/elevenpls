@@ -134,20 +134,33 @@ const VIRTUAL_TOTAL_FRAMES = 400; // Virtual frames for animations (can be any n
 const AUTO_PLAY_FRAMES = 171;
 const FPS = 30;
 const SCROLL_LOCK_DURATION = 6000; // 6 seconds
+const INITIAL_FRAMES_TO_LOAD = 30; // Load first 30 frames before starting
 
 function getFramePath(frameNumber: number): string {
   const paddedNumber = frameNumber.toString().padStart(4, "0");
   return `/frames/frame_${paddedNumber}.jpg`;
 }
 
+// Helper to load a single image
+function loadImage(frameNumber: number): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = getFramePath(frameNumber);
+  });
+}
+
 export function FrameBackground({ children }: { children: React.ReactNode }) {
   const [currentFrame, setCurrentFrame] = useState(1);
   const [isScrollLocked, setIsScrollLocked] = useState(true);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [initialLoaded, setInitialLoaded] = useState(false); // First 30 frames loaded
+  const [allLoaded, setAllLoaded] = useState(false); // All frames loaded
+  const [loadProgress, setLoadProgress] = useState(0); // 0-100
   const [autoPlayComplete, setAutoPlayComplete] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const imagesRef = useRef<HTMLImageElement[]>([]);
+  const imagesRef = useRef<(HTMLImageElement | null)[]>(new Array(TOTAL_IMAGE_FRAMES).fill(null));
   const animationFrameRef = useRef<number | null>(null);
   const lastFrameTimeRef = useRef<number>(0);
   const currentFrameRef = useRef<number>(1);
@@ -158,31 +171,64 @@ export function FrameBackground({ children }: { children: React.ReactNode }) {
     window.scrollTo(0, 0);
   }, []);
 
-  // Preload all images (only actual image frames, not virtual)
+  // Progressive image loading
   useEffect(() => {
-    const loadImages = async () => {
-      const imagePromises: Promise<HTMLImageElement>[] = [];
+    let isCancelled = false;
+    let loadedCount = 0;
 
-      for (let i = 1; i <= TOTAL_IMAGE_FRAMES; i++) {
-        const promise = new Promise<HTMLImageElement>((resolve, reject) => {
-          const img = new Image();
-          img.onload = () => resolve(img);
-          img.onerror = reject;
-          img.src = getFramePath(i);
-        });
-        imagePromises.push(promise);
+    const updateProgress = () => {
+      if (!isCancelled) {
+        setLoadProgress(Math.round((loadedCount / TOTAL_IMAGE_FRAMES) * 100));
+      }
+    };
+
+    const loadImages = async () => {
+      // Phase 1: Load first 30 frames (for initial auto-play)
+      const initialPromises = [];
+      for (let i = 1; i <= INITIAL_FRAMES_TO_LOAD; i++) {
+        initialPromises.push(
+          loadImage(i).then((img) => {
+            imagesRef.current[i - 1] = img;
+            loadedCount++;
+            updateProgress();
+            return img;
+          })
+        );
       }
 
       try {
-        const loadedImages = await Promise.all(imagePromises);
-        imagesRef.current = loadedImages;
-        setImagesLoaded(true);
+        await Promise.all(initialPromises);
+        if (!isCancelled) {
+          setInitialLoaded(true);
+        }
+
+        // Phase 2: Load remaining frames in background
+        for (let i = INITIAL_FRAMES_TO_LOAD + 1; i <= TOTAL_IMAGE_FRAMES; i++) {
+          if (isCancelled) break;
+          
+          try {
+            const img = await loadImage(i);
+            imagesRef.current[i - 1] = img;
+            loadedCount++;
+            updateProgress();
+          } catch (error) {
+            console.error(`Failed to load frame ${i}:`, error);
+          }
+        }
+
+        if (!isCancelled) {
+          setAllLoaded(true);
+        }
       } catch (error) {
-        console.error("Failed to load images:", error);
+        console.error("Failed to load initial images:", error);
       }
     };
 
     loadImages();
+
+    return () => {
+      isCancelled = true;
+    };
   }, []);
 
   // Draw current frame on canvas (caps at last available image)
@@ -193,7 +239,18 @@ export function FrameBackground({ children }: { children: React.ReactNode }) {
     const actualFrame = Math.min(frameNumber, TOTAL_IMAGE_FRAMES);
     const image = imagesRef.current[actualFrame - 1];
 
-    if (!canvas || !ctx || !image) return;
+    // If image not loaded yet, try to draw the closest loaded frame
+    if (!canvas || !ctx) return;
+    if (!image) {
+      // Find the closest loaded frame
+      for (let i = actualFrame - 1; i >= 0; i--) {
+        if (imagesRef.current[i]) {
+          ctx.drawImage(imagesRef.current[i]!, 0, 0, canvas.width, canvas.height);
+          return;
+        }
+      }
+      return;
+    }
 
     // Set canvas size to match window
     canvas.width = window.innerWidth;
@@ -220,9 +277,9 @@ export function FrameBackground({ children }: { children: React.ReactNode }) {
     ctx.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
   }, []);
 
-  // Auto-play first 171 frames at 30fps
+  // Auto-play first 171 frames at 30fps (starts after initial 30 frames loaded)
   useEffect(() => {
-    if (!imagesLoaded) return;
+    if (!initialLoaded) return;
 
     const frameInterval = 1000 / FPS;
     let frame = 1;
@@ -260,11 +317,11 @@ export function FrameBackground({ children }: { children: React.ReactNode }) {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [imagesLoaded, drawFrame]);
+  }, [initialLoaded, drawFrame]);
 
   // Lock scroll for 6 seconds
   useEffect(() => {
-    if (!imagesLoaded) return;
+    if (!initialLoaded) return;
 
     // Disable scrolling initially
     document.body.style.overflow = "hidden";
@@ -278,7 +335,7 @@ export function FrameBackground({ children }: { children: React.ReactNode }) {
       clearTimeout(timeout);
       document.body.style.overflow = "";
     };
-  }, [imagesLoaded]);
+  }, [initialLoaded]);
 
   // Handle scroll-based animation for frames 172+ (virtual frames beyond 231)
   useEffect(() => {
@@ -340,7 +397,7 @@ export function FrameBackground({ children }: { children: React.ReactNode }) {
       value={{
         currentFrame,
         totalFrames: VIRTUAL_TOTAL_FRAMES,
-        isLoading: !imagesLoaded,
+        isLoading: !initialLoaded,
         isScrollLocked,
       }}
     >
@@ -351,17 +408,52 @@ export function FrameBackground({ children }: { children: React.ReactNode }) {
           className="fixed inset-0 w-full h-full -z-10"
           style={{ 
             backgroundColor: "#000",
-            opacity: imagesLoaded ? 1 : 0,
+            opacity: initialLoaded ? 1 : 0,
             transition: "opacity 0.3s ease-in-out"
           }}
         />
         
-        {/* Loading overlay */}
-        {!imagesLoaded && (
+        {/* Loading overlay with progress */}
+        {!initialLoaded && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black">
-            <div className="flex flex-col items-center gap-4">
-              <div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin" />
-              <span className="text-white/60 text-sm tracking-wider">Loading...</span>
+            <div className="flex flex-col items-center gap-6">
+              {/* Progress ring */}
+              <div className="relative w-20 h-20">
+                <svg className="w-20 h-20 -rotate-90" viewBox="0 0 80 80">
+                  {/* Background circle */}
+                  <circle
+                    cx="40"
+                    cy="40"
+                    r="36"
+                    fill="none"
+                    stroke="rgba(255,255,255,0.1)"
+                    strokeWidth="4"
+                  />
+                  {/* Progress circle */}
+                  <circle
+                    cx="40"
+                    cy="40"
+                    r="36"
+                    fill="none"
+                    stroke="url(#progressGradient)"
+                    strokeWidth="4"
+                    strokeLinecap="round"
+                    strokeDasharray={`${2 * Math.PI * 36}`}
+                    strokeDashoffset={`${2 * Math.PI * 36 * (1 - loadProgress / 100)}`}
+                    style={{ transition: "stroke-dashoffset 0.2s ease-out" }}
+                  />
+                  <defs>
+                    <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#ff69b4" />
+                      <stop offset="100%" stopColor="#ff1493" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                {/* Percentage text */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">{loadProgress}%</span>
+                </div>
+              </div>
             </div>
           </div>
         )}
