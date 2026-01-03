@@ -1,24 +1,26 @@
-import { CometCardStack, type CardItem } from "@/components/ui/comet-card-stack";
+// import { CometCardStack, type CardItem } from "@/components/ui/comet-card-stack";
+// import { BsGraphUpArrow } from "react-icons/bs";
+// import { IoColorPaletteOutline } from "react-icons/io5";
+// import { FiRefreshCw } from "react-icons/fi";
+// import { TbChartAreaLine } from "react-icons/tb";
+// import { HiOutlineLightBulb } from "react-icons/hi";
+import { HiMenuAlt3 } from "react-icons/hi";
 import { FrameBackground, FrameAnimate } from "@/components/ui/frame-background";
-import { HiOutlineLightBulb, HiMenuAlt3 } from "react-icons/hi";
-import { BsGraphUpArrow } from "react-icons/bs";
-import { IoColorPaletteOutline } from "react-icons/io5";
-import { FiRefreshCw } from "react-icons/fi";
-import { TbChartAreaLine } from "react-icons/tb";
 import { GlobeDemo } from "@/components/GlobeDemo";
+import { DraggableCardDemo } from "@/components/DraggableCardDemo";
 
-const cards: CardItem[] = [
-	{ id: "01", label: ["Understanding", "& Analysis"], icon: <HiOutlineLightBulb /> },
-	{ id: "02", label: ["Strategy", "Development"], icon: <BsGraphUpArrow /> },
-	{ id: "03", label: ["Creative", "Implementation"], icon: <IoColorPaletteOutline /> },
-	{ id: "04", label: ["Interaction", "& Improvement"], icon: <FiRefreshCw /> },
-	{ id: "05", label: ["Evaluation", "& Development"], icon: <TbChartAreaLine /> },
-];
+// const cards: CardItem[] = [
+// 	{ id: "01", label: ["Understanding", "& Analysis"], icon: <HiOutlineLightBulb /> },
+// 	{ id: "02", label: ["Strategy", "Development"], icon: <BsGraphUpArrow /> },
+// 	{ id: "03", label: ["Creative", "Implementation"], icon: <IoColorPaletteOutline /> },
+// 	{ id: "04", label: ["Interaction", "& Improvement"], icon: <FiRefreshCw /> },
+// 	{ id: "05", label: ["Evaluation", "& Development"], icon: <TbChartAreaLine /> },
+// ];
 
 export default function Home() {
 	return (
 		<main>
-			<div className="h-[220vh]">
+			<div className="h-[280vh]">
 				<FrameBackground>
 					{/* Hero Section - fades out before WHY 11+? */}
 					<FrameAnimate
@@ -112,7 +114,7 @@ export default function Home() {
 							<div className="relative">
 								{/* Main WHY 11+? text */}
 								<h1
-									className="text-6xl md:text-8xl font-bold tracking-tight text-center bg-clip-text text-transparent"
+									className="text-6xl md:text-8xl font-bold tracking-tight text-center bg-clip-text text-transparent py-2"
 									style={{
 										backgroundImage:
 											"linear-gradient(to right, white 10%, #ff69b4 40%, #ff1493 100%)",
@@ -185,7 +187,7 @@ export default function Home() {
 									className="absolute -bottom-20 md:-bottom-24 -right-4 md:-right-32 pointer-events-none text-right"
 								>
 									<p className="text-xs md:text-base text-white/90 max-w-[120px] md:max-w-[200px] leading-relaxed">
-										Results that speak numbers 
+										Results that speak numbers
 									</p>
 								</FrameAnimate>
 							</div>
@@ -193,7 +195,17 @@ export default function Home() {
 					</FrameAnimate>
 				</FrameBackground>
 			</div>
-			<CometCardStack cards={cards} />
+			{/* <CometCardStack cards={cards} /> */}
+			<h1
+				className="text-6xl md:text-8xl font-bold tracking-tight text-center bg-clip-text text-transparent py-2"
+				style={{
+					backgroundImage:
+						"linear-gradient(to right, white 10%, #ff69b4 40%, #ff1493 100%)",
+				}}
+			>
+				Success Journey
+			</h1>
+			<DraggableCardDemo />
 			<GlobeDemo />
 			<div className="h-screen w-full"></div>
 		</main>

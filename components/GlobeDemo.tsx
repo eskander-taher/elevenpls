@@ -410,22 +410,22 @@ export function GlobeDemo() {
 					}}
 					className="div"
 				>
-					<h2
-						className="text-center text-xl md:text-4xl font-bold bg-clip-text text-transparent"
+					<h1
+						className="text-6xl md:text-8xl font-bold tracking-tight text-center bg-clip-text text-transparent py-2"
 						style={{
 							backgroundImage:
 								"linear-gradient(to right, white 10%, #ff69b4 40%, #ff1493 100%)",
 						}}
 					>
-						Global Reach, Local Excellence
-					</h2>
+						Global Reach
+					</h1>
 					<p className="text-center text-base md:text-lg font-normal text-neutral-700 dark:text-neutral-200 max-w-md mt-2 mx-auto">
 						From Saudi Arabia to the world — we craft marketing strategies that
 						transcend borders and connect brands with audiences everywhere.
 					</p>
 				</motion.div>
 
-				<div className="w-full -bottom-20 h-[50vh] z-10">
+				<div className="w-full -bottom-20 h-[70vh] z-10">
 					<World data={sampleArcs} globeConfig={globeConfig} />
 				</div>
 			</div>
