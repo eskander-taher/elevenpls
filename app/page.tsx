@@ -85,27 +85,6 @@ export default function Home() {
 									CLOSER SUCCESS
 								</h1>
 							</FrameAnimate>
-
-							{/* Description - fades in after title */}
-							<FrameAnimate
-								startFrame={40}
-								endFrame={60}
-								startOpacity={0}
-								endOpacity={1}
-								startY={20}
-								endY={0}
-							>
-								<p
-									className="mt-6 md:mt-8 text-white text-sm md:text-base lg:text-lg text-center max-w-md md:max-w-lg leading-relaxed"
-									style={{
-										textShadow:
-											"0 2px 10px rgba(0,0,0,0.5), 0 0 30px rgba(0,0,0,0.3)",
-									}}
-								>
-									Your strategic partner in digital transformation. We turn
-									ambitious visions into measurable success.
-								</p>
-							</FrameAnimate>
 						</div>
 					</FrameAnimate>
 

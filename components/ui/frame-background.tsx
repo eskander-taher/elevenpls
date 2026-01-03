@@ -129,9 +129,9 @@ export function FrameAnimate({
   );
 }
 
-const TOTAL_IMAGE_FRAMES = 146; // Actual image frames available (reduced from 231)
+const TOTAL_IMAGE_FRAMES = 135; // Actual image frames available (reduced from 231)
 const VIRTUAL_TOTAL_FRAMES = 400; // Virtual frames for animations (can be any number)
-const AUTO_PLAY_FRAMES = 86; // Reduced from 171 (half)
+const AUTO_PLAY_FRAMES = 86; // virtual frames to auto-play at start	
 const FPS = 23; // 1.5x faster (was 15)
 
 function getFramePath(frameNumber: number): string {
