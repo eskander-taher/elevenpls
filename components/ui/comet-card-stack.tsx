@@ -75,59 +75,27 @@ export function CometCardStack({
 	});
 
 	return (
-		<section ref={sectionRef} className={`w-full overflow-x-auto h-screen ${className}`}>
+		<section ref={sectionRef} className={`w-full md:h-screen ${className}`}>
 			<div className="mx-auto px-4">
-				{/* Mobile: Vertical stack */}
-				<div className="flex flex-col items-center gap-6 md:hidden">
+				{/* Mobile: Simple grid layout */}
+				<div className="grid grid-cols-2 gap-3 py-8 md:hidden">
 					{cards.map((card, index) => (
 						<motion.div
 							key={card.id}
-							initial={{ opacity: 0, y: 50, scale: 0.8 }}
-							animate={
-								isInView
-									? { opacity: 1, y: 0, scale: 1 }
-									: { opacity: 0, y: 50, scale: 0.8 }
-							}
+							initial={{ opacity: 0, y: 30 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true, margin: "-50px" }}
 							transition={{
-								duration: 0.6,
-								delay: isInView
-									? index * staggerDelay
-									: (totalCards - 1 - index) * 0.05,
+								duration: 0.5,
+								delay: index * 0.1,
 								ease: [0.22, 1, 0.36, 1],
 							}}
-							style={{
-								filter:
-									hoveredIndex === null || hoveredIndex === index
-										? "none"
-										: "blur(2px)",
-							}}
-							onMouseEnter={() => setHoveredIndex(index)}
-							onMouseLeave={() => setHoveredIndex(null)}
 						>
-							<motion.div
-								animate={{
-									opacity:
-										hoveredIndex === null
-											? 1
-											: hoveredIndex === index
-											? 1
-											: 0.3,
-								}}
-								transition={{ duration: 0.3 }}
-							>
-								<CometCard
-									initialRotateY={-15}
-									initialRotateX={-10}
-									initialRotateZ={2}
-								>
-									<CardContent
-										index={index}
-										label={card.label}
-										icon={card.icon}
-										isHovered={hoveredIndex === index}
-									/>
-								</CometCard>
-							</motion.div>
+							<MobileCard
+								index={index}
+								label={card.label}
+								icon={card.icon}
+							/>
 						</motion.div>
 					))}
 				</div>
@@ -352,6 +320,42 @@ function CardContent({ index, label, icon, size = "mobile", isHovered = false }:
 			{/* Label */}
 			<div className="relative z-10 mt-auto flex shrink-0 items-end justify-end p-4 font-mono text-white">
 				<div className="text-left text-sm leading-tight md:text-base">
+					<div>{label[0]}</div>
+					<div>{label[1]}</div>
+				</div>
+			</div>
+		</div>
+	);
+}
+
+// Simplified mobile card component
+interface MobileCardProps {
+	index: number;
+	label: [string, string];
+	icon: ReactNode;
+}
+
+function MobileCard({ index, label, icon }: MobileCardProps) {
+	return (
+		<div className="relative flex aspect-square w-full cursor-pointer flex-col rounded-xl bg-[#1a1f3d] p-3 overflow-hidden">
+			{/* Card number */}
+			<p className="font-mono text-sm font-bold text-pink-400">
+				{String(index + 1).padStart(2, "0")}
+			</p>
+
+			{/* Icon */}
+			<div className="absolute inset-0 flex items-center justify-center">
+				<div
+					className="text-white/15"
+					style={{ fontSize: "80px" }}
+				>
+					{icon}
+				</div>
+			</div>
+
+			{/* Label */}
+			<div className="relative z-10 mt-auto font-mono text-white">
+				<div className="text-xs leading-tight">
 					<div>{label[0]}</div>
 					<div>{label[1]}</div>
 				</div>

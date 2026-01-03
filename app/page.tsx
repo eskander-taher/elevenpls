@@ -5,6 +5,7 @@ import { BsGraphUpArrow } from "react-icons/bs";
 import { IoColorPaletteOutline } from "react-icons/io5";
 import { FiRefreshCw } from "react-icons/fi";
 import { TbChartAreaLine } from "react-icons/tb";
+import { GlobeDemo } from "@/components/GlobeDemo";
 
 const cards: CardItem[] = [
 	{ id: "01", label: ["Understanding", "& Analysis"], icon: <HiOutlineLightBulb /> },
@@ -17,7 +18,7 @@ const cards: CardItem[] = [
 export default function Home() {
 	return (
 		<main>
-			<div className="h-[200vh]">
+			<div className="h-[220vh]">
 				<FrameBackground>
 					{/* Hero Section - fades out before WHY 11+? */}
 					<FrameAnimate
@@ -91,14 +92,14 @@ export default function Home() {
 					{/* Wrapper to fade out all WHY 11+? section */}
 					<FrameAnimate
 						startFrame={215}
-						endFrame={235}
+						endFrame={240}
 						startOpacity={1}
 						endOpacity={0}
 						startBlur={0}
 						endBlur={5}
 						className="fixed inset-0 z-40 pointer-events-none"
 					>
-						{/* Fixed text that scales from small to large */}
+						{/* Container for WHY 11+? and surrounding texts - all positioned relative to this */}
 						<FrameAnimate
 							startFrame={130}
 							endFrame={150}
@@ -108,96 +109,92 @@ export default function Home() {
 							endOpacity={1}
 							className="fixed inset-0 flex items-center justify-center pointer-events-none"
 						>
-							<h1
-								className="text-6xl md:text-8xl font-bold tracking-tight text-center bg-clip-text text-transparent"
-								style={{
-									backgroundImage:
-										"linear-gradient(to right, white 10%, #ff69b4 40%, #ff1493 100%)",
-								}}
-							>
-								WHY 11+?
-							</h1>
-						</FrameAnimate>
+							<div className="relative">
+								{/* Main WHY 11+? text */}
+								<h1
+									className="text-6xl md:text-8xl font-bold tracking-tight text-center bg-clip-text text-transparent"
+									style={{
+										backgroundImage:
+											"linear-gradient(to right, white 10%, #ff69b4 40%, #ff1493 100%)",
+									}}
+								>
+									WHY 11+?
+								</h1>
 
-						{/* Text 1 - Upper Left area */}
-						<FrameAnimate
-							startFrame={150}
-							endFrame={175}
-							startY={400}
-							endY={0}
-							startScale={0.7}
-							endScale={1}
-							startBlur={8}
-							endBlur={0}
-							startOpacity={0}
-							endOpacity={1}
-							className="fixed top-[12%] left-4 md:top-[25%] md:left-[30%] pointer-events-none"
-						>
-							<p className="text-sm md:text-xl text-white/90 max-w-[160px] md:max-w-[280px] leading-relaxed">
-								We craft digital experiences that connect brands with their audience
-							</p>
-						</FrameAnimate>
+								{/* Text 1 - Upper Left */}
+								<FrameAnimate
+									startFrame={150}
+									endFrame={175}
+									startY={100}
+									endY={0}
+									startBlur={4}
+									endBlur={0}
+									startOpacity={0}
+									endOpacity={1}
+									className="absolute -top-20 md:-top-24 -left-4 md:-left-32 pointer-events-none"
+								>
+									<p className="text-xs md:text-base text-white/90 max-w-[120px] md:max-w-[200px] leading-relaxed">
+										We craft digital experiences
+									</p>
+								</FrameAnimate>
 
-						{/* Text 2 - Upper Right area (slightly lower) */}
-						<FrameAnimate
-							startFrame={160}
-							endFrame={185}
-							startY={400}
-							endY={0}
-							startScale={0.7}
-							endScale={1}
-							startBlur={8}
-							endBlur={0}
-							startOpacity={0}
-							endOpacity={1}
-							className="fixed top-[12%] right-4 md:top-[30%] md:right-[30%] pointer-events-none text-right"
-						>
-							<p className="text-sm md:text-xl text-white/90 max-w-[160px] md:max-w-[280px] leading-relaxed">
-								Strategy-driven design that elevates your brand presence
-							</p>
-						</FrameAnimate>
+								{/* Text 2 - Upper Right */}
+								<FrameAnimate
+									startFrame={160}
+									endFrame={185}
+									startY={100}
+									endY={0}
+									startBlur={4}
+									endBlur={0}
+									startOpacity={0}
+									endOpacity={1}
+									className="absolute -top-20 md:-top-24 -right-4 md:-right-32 pointer-events-none text-right"
+								>
+									<p className="text-xs md:text-base text-white/90 max-w-[120px] md:max-w-[200px] leading-relaxed">
+										Strategy-driven design
+									</p>
+								</FrameAnimate>
 
-						{/* Text 3 - Lower Left area */}
-						<FrameAnimate
-							startFrame={170}
-							endFrame={200}
-							startY={400}
-							endY={0}
-							startScale={0.7}
-							endScale={1}
-							startBlur={8}
-							endBlur={0}
-							startOpacity={0}
-							endOpacity={1}
-							className="fixed bottom-[12%] left-4 md:bottom-[30%] md:left-[30%] pointer-events-none"
-						>
-							<p className="text-sm md:text-xl text-white/90 max-w-[160px] md:max-w-[280px] leading-relaxed">
-								Innovation meets creativity in every project we deliver
-							</p>
-						</FrameAnimate>
+								{/* Text 3 - Lower Left */}
+								<FrameAnimate
+									startFrame={170}
+									endFrame={200}
+									startY={-100}
+									endY={0}
+									startBlur={4}
+									endBlur={0}
+									startOpacity={0}
+									endOpacity={1}
+									className="absolute -bottom-20 md:-bottom-24 -left-4 md:-left-32 pointer-events-none"
+								>
+									<p className="text-xs md:text-base text-white/90 max-w-[120px] md:max-w-[200px] leading-relaxed">
+										Innovation meets creativity
+									</p>
+								</FrameAnimate>
 
-						{/* Text 4 - Lower Right area (slightly higher) */}
-						<FrameAnimate
-							startFrame={180}
-							endFrame={210}
-							startY={400}
-							endY={0}
-							startScale={0.7}
-							endScale={1}
-							startBlur={8}
-							endBlur={0}
-							startOpacity={0}
-							endOpacity={1}
-							className="fixed bottom-[12%] right-4 md:bottom-[25%] md:right-[30%] pointer-events-none text-right"
-						>
-							<p className="text-sm md:text-xl text-white/90 max-w-[160px] md:max-w-[280px] leading-relaxed">
-								Results that speak through measurable growth and impact
-							</p>
+								{/* Text 4 - Lower Right */}
+								<FrameAnimate
+									startFrame={180}
+									endFrame={210}
+									startY={-100}
+									endY={0}
+									startBlur={4}
+									endBlur={0}
+									startOpacity={0}
+									endOpacity={1}
+									className="absolute -bottom-20 md:-bottom-24 -right-4 md:-right-32 pointer-events-none text-right"
+								>
+									<p className="text-xs md:text-base text-white/90 max-w-[120px] md:max-w-[200px] leading-relaxed">
+										Results that speak numbers 
+									</p>
+								</FrameAnimate>
+							</div>
 						</FrameAnimate>
 					</FrameAnimate>
 				</FrameBackground>
 			</div>
 			<CometCardStack cards={cards} />
+			<GlobeDemo />
 			<div className="h-screen w-full"></div>
 		</main>
 	);
