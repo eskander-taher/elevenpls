@@ -132,9 +132,9 @@ export default function Home() {
 									endBlur={0}
 									startOpacity={0}
 									endOpacity={1}
-									className="absolute -top-35	 -left-30 pointer-events-none"
+									className="absolute -top-14 -left-4 sm:-top-20 sm:-left-16 md:-top-35 md:-left-30 pointer-events-none"
 								>
-									<p className="text-xs md:text-base text-white/90 max-w-[120px] md:max-w-[200px] leading-relaxed">
+									<p className="text-xs md:text-base text-white/90 max-w-[100px] sm:max-w-[120px] md:max-w-[200px] leading-relaxed">
 										We craft digital experiences
 									</p>
 								</FrameAnimate>
@@ -149,9 +149,9 @@ export default function Home() {
 									endBlur={0}
 									startOpacity={0}
 									endOpacity={1}
-									className="absolute -top-20 -right-30  pointer-events-none text-right"
+									className="absolute -top-14 -right-4 sm:-top-16 sm:-right-16 md:-top-20 md:-right-30 pointer-events-none text-right"
 								>
-									<p className="text-xs md:text-base text-white/90 max-w-[120px] md:max-w-[200px] leading-relaxed">
+									<p className="text-xs md:text-base text-white/90 max-w-[100px] sm:max-w-[120px] md:max-w-[200px] leading-relaxed">
 										Strategy-driven design
 									</p>
 								</FrameAnimate>
@@ -166,9 +166,9 @@ export default function Home() {
 									endBlur={0}
 									startOpacity={0}
 									endOpacity={1}
-									className="absolute -bottom-20 -left-30 pointer-events-none"
+									className="absolute -bottom-14 -left-4 sm:-bottom-16 sm:-left-16 md:-bottom-20 md:-left-30 pointer-events-none"
 								>
-									<p className="text-xs md:text-base text-white/90 max-w-[120px] md:max-w-[200px] leading-relaxed">
+									<p className="text-xs md:text-base text-white/90 max-w-[100px] sm:max-w-[120px] md:max-w-[200px] leading-relaxed">
 										Innovation meets creativity
 									</p>
 								</FrameAnimate>
@@ -183,9 +183,9 @@ export default function Home() {
 									endBlur={0}
 									startOpacity={0}
 									endOpacity={1}
-									className="absolute -bottom-20  -right-30  pointer-events-none text-right"
+									className="absolute -bottom-14 -right-4 sm:-bottom-16 sm:-right-16 md:-bottom-20 md:-right-30 pointer-events-none text-right"
 								>
-									<p className="text-xs md:text-base text-white/90 max-w-[120px] md:max-w-[200px] leading-relaxed">
+									<p className="text-xs md:text-base text-white/90 max-w-[100px] sm:max-w-[120px] md:max-w-[200px] leading-relaxed">
 										Results that speak numbers
 									</p>
 								</FrameAnimate>
