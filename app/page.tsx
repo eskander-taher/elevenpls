@@ -1,26 +1,25 @@
-// import { CometCardStack, type CardItem } from "@/components/ui/comet-card-stack";
-// import { BsGraphUpArrow } from "react-icons/bs";
-// import { IoColorPaletteOutline } from "react-icons/io5";
-// import { FiRefreshCw } from "react-icons/fi";
-// import { TbChartAreaLine } from "react-icons/tb";
-// import { HiOutlineLightBulb } from "react-icons/hi";
+import { CometCardStack, type CardItem } from "@/components/ui/comet-card-stack";
+import { BsGraphUpArrow } from "react-icons/bs";
+import { IoColorPaletteOutline } from "react-icons/io5";
+import { FiRefreshCw } from "react-icons/fi";
+import { TbChartAreaLine } from "react-icons/tb";
+import { HiOutlineLightBulb } from "react-icons/hi";
 import { HiMenuAlt3 } from "react-icons/hi";
 import { FrameBackground, FrameAnimate } from "@/components/ui/frame-background";
-import { GlobeDemo } from "@/components/GlobeDemo";
-import { DraggableCardDemo } from "@/components/DraggableCardDemo";
 
-// const cards: CardItem[] = [
-// 	{ id: "01", label: ["Understanding", "& Analysis"], icon: <HiOutlineLightBulb /> },
-// 	{ id: "02", label: ["Strategy", "Development"], icon: <BsGraphUpArrow /> },
-// 	{ id: "03", label: ["Creative", "Implementation"], icon: <IoColorPaletteOutline /> },
-// 	{ id: "04", label: ["Interaction", "& Improvement"], icon: <FiRefreshCw /> },
-// 	{ id: "05", label: ["Evaluation", "& Development"], icon: <TbChartAreaLine /> },
-// ];
+
+const cards: CardItem[] = [
+	{ id: "01", label: ["Understanding", "& Analysis"], icon: <HiOutlineLightBulb /> },
+	{ id: "02", label: ["Strategy", "Development"], icon: <BsGraphUpArrow /> },
+	{ id: "03", label: ["Creative", "Implementation"], icon: <IoColorPaletteOutline /> },
+	{ id: "04", label: ["Interaction", "& Improvement"], icon: <FiRefreshCw /> },
+	{ id: "05", label: ["Evaluation", "& Development"], icon: <TbChartAreaLine /> },
+];
 
 export default function Home() {
 	return (
 		<main>
-			<div className="h-[280vh]">
+			<div className="h-[150vh]">
 				<FrameBackground>
 					{/* Hero Section - fades out before WHY 11+? */}
 					<FrameAnimate
@@ -103,7 +102,7 @@ export default function Home() {
 					>
 						{/* Container for WHY 11+? and surrounding texts - all positioned relative to this */}
 						<FrameAnimate
-							startFrame={130}
+							startFrame={133}
 							endFrame={150}
 							startScale={0.3}
 							endScale={1}
@@ -127,13 +126,13 @@ export default function Home() {
 								<FrameAnimate
 									startFrame={150}
 									endFrame={175}
-									startY={100}
+									startY={400}
 									endY={0}
 									startBlur={4}
 									endBlur={0}
 									startOpacity={0}
 									endOpacity={1}
-									className="absolute -top-20 md:-top-24 -left-4 md:-left-32 pointer-events-none"
+									className="absolute -top-35	 -left-30 pointer-events-none"
 								>
 									<p className="text-xs md:text-base text-white/90 max-w-[120px] md:max-w-[200px] leading-relaxed">
 										We craft digital experiences
@@ -142,15 +141,15 @@ export default function Home() {
 
 								{/* Text 2 - Upper Right */}
 								<FrameAnimate
-									startFrame={160}
-									endFrame={185}
-									startY={100}
+									startFrame={165}
+									endFrame={190}
+									startY={400}
 									endY={0}
 									startBlur={4}
 									endBlur={0}
 									startOpacity={0}
 									endOpacity={1}
-									className="absolute -top-20 md:-top-24 -right-4 md:-right-32 pointer-events-none text-right"
+									className="absolute -top-20 -right-30  pointer-events-none text-right"
 								>
 									<p className="text-xs md:text-base text-white/90 max-w-[120px] md:max-w-[200px] leading-relaxed">
 										Strategy-driven design
@@ -159,15 +158,15 @@ export default function Home() {
 
 								{/* Text 3 - Lower Left */}
 								<FrameAnimate
-									startFrame={170}
-									endFrame={200}
-									startY={-100}
+									startFrame={180}
+									endFrame={205}
+									startY={200}
 									endY={0}
 									startBlur={4}
 									endBlur={0}
 									startOpacity={0}
 									endOpacity={1}
-									className="absolute -bottom-20 md:-bottom-24 -left-4 md:-left-32 pointer-events-none"
+									className="absolute -bottom-20 -left-30 pointer-events-none"
 								>
 									<p className="text-xs md:text-base text-white/90 max-w-[120px] md:max-w-[200px] leading-relaxed">
 										Innovation meets creativity
@@ -176,15 +175,15 @@ export default function Home() {
 
 								{/* Text 4 - Lower Right */}
 								<FrameAnimate
-									startFrame={180}
-									endFrame={210}
-									startY={-100}
+									startFrame={195}
+									endFrame={215}
+									startY={200}
 									endY={0}
 									startBlur={4}
 									endBlur={0}
 									startOpacity={0}
 									endOpacity={1}
-									className="absolute -bottom-20 md:-bottom-24 -right-4 md:-right-32 pointer-events-none text-right"
+									className="absolute -bottom-20  -right-30  pointer-events-none text-right"
 								>
 									<p className="text-xs md:text-base text-white/90 max-w-[120px] md:max-w-[200px] leading-relaxed">
 										Results that speak numbers
@@ -195,18 +194,7 @@ export default function Home() {
 					</FrameAnimate>
 				</FrameBackground>
 			</div>
-			{/* <CometCardStack cards={cards} /> */}
-			<h1
-				className="text-6xl md:text-8xl font-bold tracking-tight text-center bg-clip-text text-transparent py-2"
-				style={{
-					backgroundImage:
-						"linear-gradient(to right, white 10%, #ff69b4 40%, #ff1493 100%)",
-				}}
-			>
-				Success Journey
-			</h1>
-			<DraggableCardDemo />
-			<GlobeDemo />
+			<CometCardStack cards={cards} />
 			<div className="h-screen w-full"></div>
 		</main>
 	);
