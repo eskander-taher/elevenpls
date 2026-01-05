@@ -338,8 +338,8 @@ export function HeroScrollSection({ heroContent, questionText, answers }: HeroSc
 					progress={progress}
 					start={0.25}
 					end={0.35}
-					from={{ opacity: 0, scale: 0.5 }}
-					to={{ opacity: 1, scale: 1 }}
+					from={{ opacity: 0, scale: 0.5, blur: 10 }}
+					to={{ opacity: 1, scale: 1, blur: 0 }}
 				>
 					<Animate
 						progress={progress}
