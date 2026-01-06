@@ -119,7 +119,7 @@ export function CometCardStack({
 						))}
 					</div>
 					{/* Tablet: Staggered horizontal layout */}
-					<div className="flex justify-center items-center hidden md:block lg:hidden min-h-[400px]">
+					<div className="flex justify-center items-center hidden md:block lg:hidden">
 						<div
 							className="relative mx-auto"
 							style={{
@@ -211,11 +211,11 @@ export function CometCardStack({
 						</div>
 					</div>
 					{/* Desktop: Full staggered layout */}
-					<div className="flex justify-center items-center hidden lg:block min-h-[500px]">
+					<div className="flex justify-center items-center hidden lg:block">
 						<div
 							className="relative mx-auto"
 							style={{
-								height: `${500 + totalCards * verticalOffset.desktop}px`,
+								height: `${300 + totalCards * verticalOffset.desktop}px`,
 								width: `${(totalCards - 1) * cardSpacing.desktop + 288}px`,
 							}}
 						>
