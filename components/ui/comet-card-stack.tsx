@@ -81,8 +81,11 @@ export function CometCardStack({
 	});
 
 	return (
-		<section ref={sectionRef} className={`w-full md:h-screen ${className} flex flex-col`}>
-			<div className="mx-auto px-4 md:px-8 lg:px-12 flex-1 flex flex-col justify-center">
+		<section
+			ref={sectionRef}
+			className={`w-full md:h-screen ${className} flex flex-col px-4 md:px-8 lg:px-12`}
+		>
+			<div className="mx-auto flex-1 flex flex-col justify-center w-full">
 				<div className="max-w-7xl mx-auto w-full">
 					{/* Section Title */}
 					<div className="w-full mb-4 md:mb-6 text-left">
