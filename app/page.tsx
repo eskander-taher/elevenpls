@@ -7,6 +7,7 @@ import { HiOutlineLightBulb } from "react-icons/hi";
 import { HiMenuAlt3 } from "react-icons/hi";
 import { HeroScrollSection } from "@/components/ui/hero-scroll-section";
 import { ScrollHeader } from "@/components/ui/scroll-header";
+import { ServicesSection } from "@/components/ui/services-section";
 
 const cards: CardItem[] = [
 	{ id: "01", label: ["Understanding", "& Analysis"], icon: <HiOutlineLightBulb /> },
@@ -21,6 +22,39 @@ const answers = [
 	"Strategy-driven design",
 	"Innovation meets creativity",
 	"Results that speak numbers",
+];
+
+const services = [
+	{
+		id: "01",
+		title: "Web Development",
+		description: "Creating modern, responsive websites that drive results",
+		image: "/frames/Frame_0001.jpeg",
+	},
+	{
+		id: "02",
+		title: "Brand Design",
+		description: "Building memorable brand identities that stand out",
+		image: "/frames/Frame_0002.jpeg",
+	},
+	{
+		id: "03",
+		title: "Digital Marketing",
+		description: "Growing your online presence with strategic campaigns",
+		image: "/frames/Frame_0003.jpeg",
+	},
+	{
+		id: "04",
+		title: "UI/UX Design",
+		description: "Designing intuitive user experiences that convert",
+		image: "/frames/Frame_0004.jpeg",
+	},
+	{
+		id: "05",
+		title: "E-commerce",
+		description: "Building powerful online stores that sell",
+		image: "/frames/Frame_0005.jpeg",
+	},
 ];
 
 function Header() {
@@ -79,8 +113,8 @@ export default function Home() {
 				questionText={<QuestionText />}
 				answers={answers}
 			/>
+			<ServicesSection services={services} />
 			<CometCardStack cards={cards} />
-			<div className="h-screen w-full"></div>
 		</main>
 	);
 }

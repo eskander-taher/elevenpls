@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 
 export interface ServiceItem {
@@ -16,104 +16,185 @@ interface ServicesSectionProps {
 
 export function ServicesSection({ services }: ServicesSectionProps) {
 	const [activeIndex, setActiveIndex] = useState<number>(0);
+	const [isPaused, setIsPaused] = useState<boolean>(false);
+	const [progress, setProgress] = useState<number>(0);
+	const intervalRef = useRef<NodeJS.Timeout | null>(null);
+	const progressRef = useRef<NodeJS.Timeout | null>(null);
+	const startTimeRef = useRef<number>(Date.now());
+	const elapsedTimeRef = useRef<number>(0);
+	const lastActiveIndexRef = useRef<number>(-1);
+
+	// Progress bar animation
+	useEffect(() => {
+		// Reset progress when column changes
+		if (activeIndex !== lastActiveIndexRef.current) {
+			setProgress(0);
+			elapsedTimeRef.current = 0;
+			startTimeRef.current = Date.now();
+			lastActiveIndexRef.current = activeIndex;
+		}
+
+		if (isPaused) {
+			// Save elapsed time when paused
+			if (progressRef.current) {
+				clearInterval(progressRef.current);
+				progressRef.current = null;
+			}
+			elapsedTimeRef.current = Date.now() - startTimeRef.current;
+			return;
+		}
+
+		// Resume from where we left off
+		startTimeRef.current = Date.now() - elapsedTimeRef.current;
+
+		// Update progress every 16ms (60fps)
+		progressRef.current = setInterval(() => {
+			const elapsed = Date.now() - startTimeRef.current;
+			const newProgress = Math.min((elapsed / 10000) * 100, 100);
+			setProgress(newProgress);
+		}, 16);
+
+		return () => {
+			if (progressRef.current) {
+				clearInterval(progressRef.current);
+			}
+		};
+	}, [activeIndex, isPaused]);
+
+	// Auto-expand columns one by one
+	useEffect(() => {
+		if (isPaused) {
+			// Clear interval when paused
+			if (intervalRef.current) {
+				clearInterval(intervalRef.current);
+				intervalRef.current = null;
+			}
+			return;
+		}
+
+		// Auto-expand columns one by one (only 4 columns)
+		intervalRef.current = setInterval(() => {
+			setActiveIndex((prevIndex) => {
+				const nextIndex = (prevIndex + 1) % 4;
+				return nextIndex;
+			});
+		}, 10000); // 10 seconds per column
+
+		// Cleanup on unmount
+		return () => {
+			if (intervalRef.current) {
+				clearInterval(intervalRef.current);
+			}
+		};
+	}, [isPaused, services.length]);
+
+	const handleClick = (index: number) => {
+		// Don't do anything if it's the same column
+		if (activeIndex === index) {
+			return;
+		}
+
+		// Pause auto-expand and switch to clicked column
+		setIsPaused(true);
+		setActiveIndex(index);
+		// Reset progress when manually switching
+		setProgress(0);
+		elapsedTimeRef.current = 0;
+		startTimeRef.current = Date.now();
+		lastActiveIndexRef.current = index;
+
+		// Resume auto-expand after 10 seconds
+		setTimeout(() => {
+			setIsPaused(false);
+		}, 10000);
+	};
 
 	return (
-		<section className="h-screen w-full flex overflow-hidden">
-			{services.map((service, index) => {
-				const isActive = activeIndex === index;
-				const width = isActive ? "w-[50%]" : "w-[10%]";
+		<section className="h-screen w-full flex items-center justify-center px-4 md:px-8 lg:px-12 py-8">
+			<div className="h-[70vh] w-full max-w-7xl">
+				<div className="h-full w-full flex gap-3 md:gap-4">
+					{services.slice(0, 4).map((service, index) => {
+						const isActive = activeIndex === index;
+						const flexClass = isActive ? "flex-[6]" : "flex-[0.8]";
 
-				return (
-					<div
-						key={service.id}
-						className={`${width} h-full relative transition-all duration-500 ease-in-out cursor-pointer group overflow-hidden`}
-						onMouseEnter={() => setActiveIndex(index)}
-					>
-						{/* Background Image */}
-						<div className="absolute inset-0 w-full h-full">
-							<Image
-								src={service.image}
-								alt={service.title}
-								fill
-								className="object-cover transition-transform duration-500 group-hover:scale-110"
-								priority={index < 2}
-							/>
-							{/* Overlay gradient */}
-							<div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-						</div>
-
-						{/* Content */}
-						<div className="absolute inset-0 flex flex-col justify-end p-8 text-white z-10">
+						return (
 							<div
-								className={`transition-all duration-500 ${
-									isActive
-										? "opacity-100 translate-y-0"
-										: "opacity-0 translate-y-4"
-								}`}
+								key={service.id}
+								className={`${flexClass} h-full relative transition-all duration-500 ease-in-out cursor-pointer group overflow-hidden rounded-xl md:rounded-2xl`}
+								onClick={() => handleClick(index)}
 							>
-								<h3 className="text-3xl md:text-4xl font-bold mb-2">
-									{service.title}
-								</h3>
-								{service.description && (
-									<p className="text-lg opacity-90 max-w-md">
-										{service.description}
-									</p>
-								)}
-							</div>
-						</div>
+								{/* Background Image */}
+								<div className="absolute inset-0 w-full h-full">
+									<Image
+										src={service.image}
+										alt={service.title}
+										fill
+										className={`object-cover transition-all duration-500 group-hover:scale-110 ${
+											isActive ? "opacity-100 blur-0" : "opacity-30 blur-md"
+										}`}
+										priority={index < 2}
+									/>
+									{/* Overlay gradient */}
+									<div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+								</div>
 
-						{/* Label for collapsed state */}
-						{!isActive && (
-							<div className="absolute inset-0 flex items-center justify-center z-10">
-								<div className="transform -rotate-90 whitespace-nowrap">
-									<span className="text-white text-sm font-medium">
-										{service.title}
-									</span>
+								{/* Progress Bar */}
+								{isActive && (
+									<div className="absolute top-0 left-0 right-0 h-1 bg-black/30 z-20">
+										<div
+											className="h-full bg-gradient-to-r from-white to-pink-400 transition-all duration-75 ease-linear"
+											style={{ width: `${progress}%` }}
+										/>
+									</div>
+								)}
+
+								{/* Content */}
+								<div
+									className={`absolute inset-0 flex text-white z-10 transition-all duration-500 ${
+										isActive
+											? "flex-col justify-end p-8"
+											: "items-center justify-center"
+									}`}
+								>
+									{/* Title - rotates when inactive */}
+									<div
+										className={`transition-all duration-500 ${
+											isActive
+												? "relative w-full"
+												: "absolute inset-0 flex items-center justify-center"
+										}`}
+									>
+										<h3
+											className={`font-bold transition-all duration-500 whitespace-nowrap will-change-transform ${
+												isActive
+													? "text-3xl md:text-4xl mb-2 rotate-0"
+													: "text-3xl md:text-4xl -rotate-90 origin-center"
+											}`}
+										>
+											{service.title}
+										</h3>
+									</div>
+
+									{/* Description - fade in/out with delays */}
+									{service.description && (
+										<div
+											className={`transition-all ${
+												isActive
+													? "duration-500 opacity-100 translate-y-0 delay-300"
+													: "duration-200 opacity-0 translate-y-4 delay-0"
+											}`}
+										>
+											<p className="text-lg opacity-90 max-w-md">
+												{service.description}
+											</p>
+										</div>
+									)}
 								</div>
 							</div>
-						)}
-					</div>
-				);
-			})}
+						);
+					})}
+				</div>
+			</div>
 		</section>
 	);
 }
-
- const services = [
-	{
-		id: "01",
-		title: "Web Development",
-		description: "Creating modern, responsive websites that drive results",
-		image: "/frames/Frame_0001.jpeg",
-	},
-	{
-		id: "02",
-		title: "Brand Design",
-		description: "Building memorable brand identities that stand out",
-		image: "/frames/Frame_0002.jpeg",
-	},
-	{
-		id: "03",
-		title: "Digital Marketing",
-		description: "Growing your online presence with strategic campaigns",
-		image: "/frames/Frame_0003.jpeg",
-	},
-	{
-		id: "04",
-		title: "UI/UX Design",
-		description: "Designing intuitive user experiences that convert",
-		image: "/frames/Frame_0004.jpeg",
-	},
-	{
-		id: "05",
-		title: "E-commerce",
-		description: "Building powerful online stores that sell",
-		image: "/frames/Frame_0005.jpeg",
-	},
-	{
-		id: "06",
-		title: "Consulting",
-		description: "Strategic guidance to accelerate your growth",
-		image: "/frames/Frame_0006.jpeg",
-	},
-];
