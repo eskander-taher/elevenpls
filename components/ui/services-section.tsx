@@ -98,7 +98,21 @@ export function ServicesSection({ services }: ServicesSectionProps) {
 	};
 
 	return (
-		<section className="h-screen w-full flex items-center justify-center px-4 md:px-8 lg:px-12 py-8">
+		<section className="h-screen w-full flex flex-col items-center justify-center px-4 md:px-8 lg:px-12 py-8">
+			{/* Section Title */}
+			<div className="w-full max-w-7xl mb-8 md:mb-12 text-left">
+				<h2 className="text-sm md:text-base font-normal text-white/80 mb-2">our</h2>
+				<h2
+					className="text-4xl md:text-5xl lg:text-6xl font-bold bg-clip-text text-transparent"
+					style={{
+						backgroundImage:
+							"linear-gradient(to right, white 5%, #ff69b4 15%, #ff1493 100%)",
+					}}
+				>
+					Creative Services
+				</h2>
+			</div>
+
 			<div className="h-[70vh] w-full max-w-7xl">
 				<div className="h-full w-full flex gap-3 md:gap-4">
 					{services.map((service, index) => {
