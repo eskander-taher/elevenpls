@@ -11,6 +11,7 @@ export const CometCard = ({
 	initialRotateZ = 2,
 	className,
 	children,
+	disabled = false,
 }: {
 	rotateDepth?: number;
 	translateDepth?: number;
@@ -19,6 +20,7 @@ export const CometCard = ({
 	initialRotateZ?: number;
 	className?: string;
 	children: React.ReactNode;
+	disabled?: boolean;
 }) => {
 	const ref = useRef<HTMLDivElement>(null);
 	const [isHovered, setIsHovered] = useState(false);
@@ -57,7 +59,7 @@ export const CometCard = ({
 	const glareBackground = useMotionTemplate`radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255, 255, 255, 0.9) 10%, rgba(255, 255, 255, 0.75) 20%, rgba(255, 255, 255, 0) 80%)`;
 
 	const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-		if (!ref.current) return;
+		if (!ref.current || disabled) return;
 
 		const rect = ref.current.getBoundingClientRect();
 
@@ -80,7 +82,17 @@ export const CometCard = ({
 		setIsHovered(false);
 	};
 
+	// Reset transforms when disabled
+	React.useEffect(() => {
+		if (disabled) {
+			x.set(0);
+			y.set(0);
+			setIsHovered(false);
+		}
+	}, [disabled, x, y]);
+
 	const handleMouseEnter = () => {
+		if (disabled) return;
 		setIsHovered(true);
 	};
 
@@ -100,11 +112,15 @@ export const CometCard = ({
 					translateY,
 				}}
 				initial={{ scale: 1, z: 0 }}
-				whileHover={{
-					scale: 1.05,
-					z: 50,
-					transition: { duration: 0.2 },
-				}}
+				whileHover={
+					disabled
+						? {}
+						: {
+								scale: 1.05,
+								z: 50,
+								transition: { duration: 0.2 },
+						  }
+				}
 			>
 				{/* Rotating glow border wrapper */}
 				<div className="relative p-[2px] rounded-2xl overflow-hidden">
@@ -112,7 +128,7 @@ export const CometCard = ({
 					<div 
 						className={cn(
 							"absolute inset-[-50%] transition-opacity duration-300",
-							isHovered ? "opacity-100 animate-border-spin" : "opacity-0"
+							disabled || !isHovered ? "opacity-0" : "opacity-100 animate-border-spin"
 						)}
 						style={{
 							background: "conic-gradient(from 0deg, transparent 0%, transparent 15%, white 17%, #ff69b4 20%, #ff1493 30%, white 33%, transparent 35%, transparent 65%, white 67%, #ff69b4 70%, #ff1493 80%, white 83%, transparent 85%, transparent 100%)",
@@ -125,7 +141,7 @@ export const CometCard = ({
 							className="pointer-events-none absolute inset-0 z-50 h-full w-full rounded-[16px] mix-blend-overlay"
 							style={{
 								background: glareBackground,
-								opacity: 0.6,
+								opacity: disabled ? 0 : 0.6,
 							}}
 							transition={{ duration: 0.2 }}
 						/>

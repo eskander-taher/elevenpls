@@ -165,11 +165,15 @@ export function ServicesSection({ services }: ServicesSectionProps) {
 										}`}
 									>
 										<h3
-											className={`font-bold transition-all duration-500 whitespace-nowrap will-change-transform ${
+											className={`font-bold transition-all duration-500 whitespace-nowrap will-change-transform bg-clip-text text-transparent ${
 												isActive
 													? "text-3xl md:text-4xl mb-2 rotate-0"
 													: "text-3xl md:text-4xl -rotate-90 origin-center"
 											}`}
+											style={{
+												backgroundImage:
+													"linear-gradient(to right, white 5%, #ff69b4 15%, #ff1493 100%)",
+											}}
 										>
 											{service.title}
 										</h3>

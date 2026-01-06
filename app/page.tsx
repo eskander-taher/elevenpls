@@ -8,6 +8,7 @@ import { HiMenuAlt3 } from "react-icons/hi";
 import { HeroScrollSection } from "@/components/ui/hero-scroll-section";
 import { ScrollHeader } from "@/components/ui/scroll-header";
 import { ServicesSection } from "@/components/ui/services-section";
+import Image from "next/image";
 
 const cards: CardItem[] = [
 	{ id: "01", label: ["Understanding", "& Analysis"], icon: <HiOutlineLightBulb /> },
@@ -61,9 +62,15 @@ function Header() {
 	return (
 		<ScrollHeader>
 			{/* Logo */}
-			<div className="flex items-center gap-1">
-				<span className="text-2xl md:text-3xl font-bold text-white">11</span>
-				<span className="text-2xl md:text-3xl font-bold text-pink-400">+</span>
+			<div className="flex items-center">
+				<Image
+					src="/logo.svg"
+					alt="11+ Logo"
+					width={80}
+					height={40}
+					className="h-8 w-auto md:h-10"
+					priority
+				/>
 			</div>
 			{/* Right side: CTA + Hamburger */}
 			<div className="flex items-center gap-4">
@@ -75,19 +82,6 @@ function Header() {
 				</button>
 			</div>
 		</ScrollHeader>
-	);
-}
-
-function HeroContent() {
-	return (
-		<h1
-			className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tighter text-center leading-tight bg-clip-text text-transparent drop-shadow-[0_2px_30px_rgba(0,0,0,0.3)] py-2"
-			style={{
-				backgroundImage: "linear-gradient(to right, white 10%, #ff69b4 40%, #ff1493 100%)",
-			}}
-		>
-			CLOSER SUCCESS
-		</h1>
 	);
 }
 
@@ -108,11 +102,7 @@ export default function Home() {
 	return (
 		<main>
 			<Header />
-			<HeroScrollSection
-				heroContent={<HeroContent />}
-				questionText={<QuestionText />}
-				answers={answers}
-			/>
+			<HeroScrollSection questionText={<QuestionText />} answers={answers} />
 			<ServicesSection services={services} />
 			<CometCardStack cards={cards} />
 		</main>

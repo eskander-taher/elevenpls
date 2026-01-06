@@ -53,6 +53,13 @@ export function CometCardStack({
 		checkInitialVisibility();
 	}, []);
 
+	// Reset hover state when cards collapse
+	useEffect(() => {
+		if (!isInView) {
+			setHoveredIndex(null);
+		}
+	}, [isInView]);
+
 	const totalCards = cards.length;
 
 	// Responsive spacing values
@@ -91,15 +98,10 @@ export function CometCardStack({
 								ease: [0.22, 1, 0.36, 1],
 							}}
 						>
-							<MobileCard
-								index={index}
-								label={card.label}
-								icon={card.icon}
-							/>
+							<MobileCard index={index} label={card.label} icon={card.icon} />
 						</motion.div>
 					))}
 				</div>
-
 				{/* Tablet: Staggered horizontal layout */}
 				<div
 					className="relative mx-auto hidden md:block lg:hidden"
@@ -113,6 +115,7 @@ export function CometCardStack({
 							cardSpacing.tablet,
 							verticalOffset.tablet
 						);
+
 						return cards.map((card, index) => (
 							<motion.div
 								key={card.id}
@@ -132,37 +135,39 @@ export function CometCardStack({
 												scale: 1,
 										  }
 										: {
-												left: centerX,
-												bottom: centerY,
-												opacity: 0.8,
+												left: centerX + index * 20,
+												bottom: centerY + index * 8,
+												opacity: 1,
 												scale: 0.95,
 										  }
 								}
 								transition={{
 									duration: 0.7,
 									delay: isInView
-										? index * staggerDelay
+										? Math.min(index, totalCards - 1 - index) * staggerDelay
 										: (totalCards - 1 - index) * 0.05,
 									ease: [0.22, 1, 0.36, 1],
 								}}
 								style={{
 									zIndex: hoveredIndex === index ? 100 : totalCards - index,
-									filter:
-										hoveredIndex === null || hoveredIndex === index
-											? "none"
-											: "blur(2px)",
+									filter: !isInView
+										? "none"
+										: hoveredIndex === null || hoveredIndex === index
+										? "none"
+										: "blur(2px)",
 								}}
-								onMouseEnter={() => setHoveredIndex(index)}
-								onMouseLeave={() => setHoveredIndex(null)}
+								onMouseEnter={() => isInView && setHoveredIndex(index)}
+								onMouseLeave={() => isInView && setHoveredIndex(null)}
 							>
 								<motion.div
 									animate={{
-										opacity:
-											hoveredIndex === null
-												? 1
-												: hoveredIndex === index
-												? 1
-												: 0.3,
+										opacity: !isInView
+											? 1
+											: hoveredIndex === null
+											? 1
+											: hoveredIndex === index
+											? 1
+											: 0.3,
 									}}
 									transition={{ duration: 0.3 }}
 								>
@@ -170,13 +175,14 @@ export function CometCardStack({
 										initialRotateY={-25}
 										initialRotateX={-15}
 										initialRotateZ={3}
+										disabled={!isInView}
 									>
 										<CardContent
 											index={index}
 											label={card.label}
 											icon={card.icon}
 											size="tablet"
-											isHovered={hoveredIndex === index}
+											isHovered={hoveredIndex === index && isInView}
 										/>
 									</CometCard>
 								</motion.div>
@@ -184,8 +190,9 @@ export function CometCardStack({
 						));
 					})()}
 				</div>
-
-				{/* Desktop: Full staggered layout */}
+				{
+					/* Desktop: Full staggered layout */
+				}
 				<div
 					className="relative mx-auto hidden lg:block"
 					style={{
@@ -217,37 +224,39 @@ export function CometCardStack({
 												scale: 1,
 										  }
 										: {
-												left: centerX,
-												bottom: centerY,
-												opacity: 0.8,
+												left: centerX + index * 25,
+												bottom: centerY + index * 10,
+												opacity: 1,
 												scale: 0.95,
 										  }
 								}
 								transition={{
 									duration: 0.7,
 									delay: isInView
-										? index * staggerDelay
+										? Math.min(index, totalCards - 1 - index) * staggerDelay
 										: (totalCards - 1 - index) * 0.05,
 									ease: [0.22, 1, 0.36, 1],
 								}}
 								style={{
 									zIndex: hoveredIndex === index ? 100 : totalCards - index,
-									filter:
-										hoveredIndex === null || hoveredIndex === index
-											? "none"
-											: "blur(2px)",
+									filter: !isInView
+										? "none"
+										: hoveredIndex === null || hoveredIndex === index
+										? "none"
+										: "blur(2px)",
 								}}
-								onMouseEnter={() => setHoveredIndex(index)}
-								onMouseLeave={() => setHoveredIndex(null)}
+								onMouseEnter={() => isInView && setHoveredIndex(index)}
+								onMouseLeave={() => isInView && setHoveredIndex(null)}
 							>
 								<motion.div
 									animate={{
-										opacity:
-											hoveredIndex === null
-												? 1
-												: hoveredIndex === index
-												? 1
-												: 0.3,
+										opacity: !isInView
+											? 1
+											: hoveredIndex === null
+											? 1
+											: hoveredIndex === index
+											? 1
+											: 0.3,
 									}}
 									transition={{ duration: 0.3 }}
 								>
@@ -255,13 +264,14 @@ export function CometCardStack({
 										initialRotateY={-20}
 										initialRotateX={-12}
 										initialRotateZ={2}
+										disabled={!isInView}
 									>
 										<CardContent
 											index={index}
 											label={card.label}
 											icon={card.icon}
 											size="desktop"
-											isHovered={hoveredIndex === index}
+											isHovered={hoveredIndex === index && isInView}
 										/>
 									</CometCard>
 								</motion.div>
@@ -269,6 +279,7 @@ export function CometCardStack({
 						));
 					})()}
 				</div>
+				
 			</div>
 		</section>
 	);
@@ -291,7 +302,7 @@ function CardContent({ index, label, icon, size = "mobile", isHovered = false }:
 
 	return (
 		<div
-			className={`relative flex ${sizeClasses[size]} cursor-pointer flex-col items-stretch rounded-2xl border-0 bg-[#1a1f3d] p-3 md:p-4 overflow-hidden`}
+			className={`relative flex ${sizeClasses[size]} cursor-pointer flex-col items-stretch rounded-2xl border-0 bg-blue-950 p-3 md:p-4 overflow-hidden`}
 			style={{ transformStyle: "preserve-3d" }}
 		>
 			{/* Card number */}
@@ -337,7 +348,7 @@ interface MobileCardProps {
 
 function MobileCard({ index, label, icon }: MobileCardProps) {
 	return (
-		<div className="relative flex aspect-square w-full cursor-pointer flex-col rounded-xl bg-[#1a1f3d] p-3 overflow-hidden">
+		<div className="relative flex aspect-square w-full cursor-pointer flex-col rounded-xl bg-blue-950 p-3 overflow-hidden">
 			{/* Card number */}
 			<p className="font-mono text-sm font-bold text-pink-400">
 				{String(index + 1).padStart(2, "0")}
@@ -345,10 +356,7 @@ function MobileCard({ index, label, icon }: MobileCardProps) {
 
 			{/* Icon */}
 			<div className="absolute inset-0 flex items-center justify-center">
-				<div
-					className="text-white/15"
-					style={{ fontSize: "80px" }}
-				>
+				<div className="text-white/15" style={{ fontSize: "80px" }}>
 					{icon}
 				</div>
 			</div>

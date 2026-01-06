@@ -115,7 +115,7 @@ function AnswerItem({ children, progress, startProgress, isLeft }: AnswerItemPro
 }
 
 interface HeroScrollSectionProps {
-	heroContent: React.ReactNode;
+	heroContent?: React.ReactNode;
 	questionText: React.ReactNode;
 	answers: string[];
 }
