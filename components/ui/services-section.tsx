@@ -24,7 +24,7 @@ export function ServicesSection({ services }: ServicesSectionProps) {
 	const elapsedTimeRef = useRef<number>(0);
 	const lastActiveIndexRef = useRef<number>(-1);
 
-	// Progress bar animation
+	// Progress bar animation - always runs when column is open
 	useEffect(() => {
 		// Reset progress when column changes
 		if (activeIndex !== lastActiveIndexRef.current) {
@@ -34,19 +34,7 @@ export function ServicesSection({ services }: ServicesSectionProps) {
 			lastActiveIndexRef.current = activeIndex;
 		}
 
-		if (isPaused) {
-			// Save elapsed time when paused
-			if (progressRef.current) {
-				clearInterval(progressRef.current);
-				progressRef.current = null;
-			}
-			elapsedTimeRef.current = Date.now() - startTimeRef.current;
-			return;
-		}
-
-		// Resume from where we left off
-		startTimeRef.current = Date.now() - elapsedTimeRef.current;
-
+		// Always run progress bar when a column is active (regardless of isPaused)
 		// Update progress every 16ms (60fps)
 		progressRef.current = setInterval(() => {
 			const elapsed = Date.now() - startTimeRef.current;
@@ -59,7 +47,7 @@ export function ServicesSection({ services }: ServicesSectionProps) {
 				clearInterval(progressRef.current);
 			}
 		};
-	}, [activeIndex, isPaused]);
+	}, [activeIndex]);
 
 	// Auto-expand columns one by one
 	useEffect(() => {
@@ -72,10 +60,10 @@ export function ServicesSection({ services }: ServicesSectionProps) {
 			return;
 		}
 
-		// Auto-expand columns one by one (only 4 columns)
+		// Auto-expand columns one by one
 		intervalRef.current = setInterval(() => {
 			setActiveIndex((prevIndex) => {
-				const nextIndex = (prevIndex + 1) % 4;
+				const nextIndex = (prevIndex + 1) % services.length;
 				return nextIndex;
 			});
 		}, 10000); // 10 seconds per column
@@ -113,9 +101,9 @@ export function ServicesSection({ services }: ServicesSectionProps) {
 		<section className="h-screen w-full flex items-center justify-center px-4 md:px-8 lg:px-12 py-8">
 			<div className="h-[70vh] w-full max-w-7xl">
 				<div className="h-full w-full flex gap-3 md:gap-4">
-					{services.slice(0, 4).map((service, index) => {
+					{services.map((service, index) => {
 						const isActive = activeIndex === index;
-						const flexClass = isActive ? "flex-[6]" : "flex-[0.8]";
+						const flexClass = isActive ? "flex-[6]" : "flex-[0.7]";
 
 						return (
 							<div

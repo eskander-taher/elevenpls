@@ -28,33 +28,45 @@ const answers = [
 const services = [
 	{
 		id: "01",
-		title: "Web Development",
-		description: "Creating modern, responsive websites that drive results",
+		title: "Branding",
+		description: "Brand strategy, identity design, logo creation, and comprehensive brand documentation",
 		image: "/frames/Frame_0001.jpeg",
 	},
 	{
 		id: "02",
-		title: "Brand Design",
-		description: "Building memorable brand identities that stand out",
+		title: "Marketing Consultations",
+		description: "Comprehensive market analysis grounded in accurate data and realistic brand positioning",
 		image: "/frames/Frame_0002.jpeg",
 	},
 	{
 		id: "03",
 		title: "Digital Marketing",
-		description: "Growing your online presence with strategic campaigns",
+		description: "Social media management, SEO/SEM, campaigns, and strategic marketing plans",
 		image: "/frames/Frame_0003.jpeg",
 	},
 	{
 		id: "04",
-		title: "UI/UX Design",
-		description: "Designing intuitive user experiences that convert",
+		title: "Content Creation",
+		description: "Creative writing, visual content, audio, interactive and trending content solutions",
 		image: "/frames/Frame_0004.jpeg",
 	},
 	{
 		id: "05",
-		title: "E-commerce",
-		description: "Building powerful online stores that sell",
+		title: "Technology Solutions",
+		description: "Website and application development, UI/UX design, and automation services",
 		image: "/frames/Frame_0005.jpeg",
+	},
+	{
+		id: "06",
+		title: "Photography",
+		description: "Portrait, corporate, food, product, architectural photography and events coverage",
+		image: "/frames/Frame_0006.jpeg",
+	},
+	{
+		id: "07",
+		title: "Video Production",
+		description: "Commercial videos, film production, documentaries, editing, and motion graphics",
+		image: "/frames/Frame_0007.jpeg",
 	},
 ];
 

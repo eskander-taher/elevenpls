@@ -130,6 +130,9 @@ export function HeroScrollSection({ heroContent, questionText, answers }: HeroSc
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const videoRef = useRef<HTMLVideoElement>(null);
 	const imagesRef = useRef<HTMLImageElement[]>([]);
+	const prevFrameRef = useRef<number>(1);
+	const frameChangeTimeRef = useRef<number>(Date.now());
+	const [motionBlur, setMotionBlur] = useState(0);
 
 	// Preload frames
 	useEffect(() => {
@@ -150,7 +153,7 @@ export function HeroScrollSection({ heroContent, questionText, answers }: HeroSc
 			.catch(console.error);
 	}, []);
 
-	// Draw frame on canvas
+	// Draw frame on canvas with motion blur
 	const drawFrame = useCallback((frameNum: number) => {
 		const canvas = canvasRef.current;
 		const ctx = canvas?.getContext("2d");
@@ -159,8 +162,27 @@ export function HeroScrollSection({ heroContent, questionText, answers }: HeroSc
 
 		if (!canvas || !ctx || !img) return;
 
+		// Calculate frame change rate for motion blur
+		const now = Date.now();
+		const timeDelta = now - frameChangeTimeRef.current;
+		const frameDelta = Math.abs(frame - prevFrameRef.current);
+
+		// Calculate blur amount based on frame change rate
+		// Faster frame changes = more blur
+		const frameChangeRate = frameDelta / Math.max(timeDelta, 16); // frames per ms
+		const blurAmount = Math.min(frameChangeRate * 2, 4); // Cap at 4px blur
+
+		setMotionBlur(blurAmount);
+
+		prevFrameRef.current = frame;
+		frameChangeTimeRef.current = now;
+
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
+
+		// Enable image smoothing for smoother transitions
+		ctx.imageSmoothingEnabled = true;
+		ctx.imageSmoothingQuality = "high";
 
 		const imgRatio = img.width / img.height;
 		const canvasRatio = canvas.width / canvas.height;
@@ -242,6 +264,9 @@ export function HeroScrollSection({ heroContent, questionText, answers }: HeroSc
 	useEffect(() => {
 		if (!videoEnded || !imagesLoaded) return;
 
+		let lastScrollTime = Date.now();
+		let blurDecayInterval: NodeJS.Timeout | null = null;
+
 		const handleScroll = () => {
 			const container = containerRef.current;
 			if (!container) return;
@@ -259,15 +284,32 @@ export function HeroScrollSection({ heroContent, questionText, answers }: HeroSc
 			const frameProgress = Math.min(p / 0.25, 1);
 			const frame = 1 + frameProgress * (TOTAL_FRAMES - 1);
 			drawFrame(frame);
+
+			lastScrollTime = Date.now();
+		};
+
+		// Blur decay when scrolling stops
+		const startBlurDecay = () => {
+			if (blurDecayInterval) clearInterval(blurDecayInterval);
+
+			blurDecayInterval = setInterval(() => {
+				const timeSinceLastScroll = Date.now() - lastScrollTime;
+				if (timeSinceLastScroll > 100) {
+					// Gradually reduce blur when not scrolling
+					setMotionBlur((prev) => Math.max(0, prev * 0.9));
+				}
+			}, 16);
 		};
 
 		handleScroll();
+		startBlurDecay();
 		window.addEventListener("scroll", handleScroll, { passive: true });
 		window.addEventListener("resize", handleScroll);
 
 		return () => {
 			window.removeEventListener("scroll", handleScroll);
 			window.removeEventListener("resize", handleScroll);
+			if (blurDecayInterval) clearInterval(blurDecayInterval);
 		};
 	}, [videoEnded, imagesLoaded, drawFrame]);
 
@@ -292,8 +334,11 @@ export function HeroScrollSection({ heroContent, questionText, answers }: HeroSc
 			<div className="fixed inset-0 -z-10">
 				<canvas
 					ref={canvasRef}
-					className="absolute inset-0 w-full h-full bg-black"
-					style={{ opacity: imagesLoaded ? 1 : 0 }}
+					className="absolute inset-0 w-full h-full bg-black transition-all duration-75"
+					style={{
+						opacity: imagesLoaded ? 1 : 0,
+						filter: motionBlur > 0 ? `blur(${motionBlur}px)` : "none",
+					}}
 				/>
 
 				<video
