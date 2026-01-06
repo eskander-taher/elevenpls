@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect } from "react";
 import { CometCardStack, type CardItem } from "@/components/ui/comet-card-stack";
 import { BsGraphUpArrow } from "react-icons/bs";
 import { IoColorPaletteOutline } from "react-icons/io5";
@@ -29,43 +32,43 @@ const services = [
 	{
 		id: "01",
 		title: "Branding",
-		description: "Brand strategy, identity design, logo creation, and comprehensive brand documentation",
+		description: "Brand strategy & analysis, brand story & goals, targeted audience and market, logo concept & design, brand identity, administrative and official documents, digital templates and promotional prints, brand business profile",
 		image: "/frames/Frame_0001.jpeg",
 	},
 	{
 		id: "02",
 		title: "Marketing Consultations",
-		description: "Comprehensive market analysis grounded in accurate data and realistic brand positioning",
+		description: "We provide a comprehensive analysis of the market, competitors, and customers, grounded in accurate data and realistic understandings of your brand, position and dynamics within the market.",
 		image: "/frames/Frame_0002.jpeg",
 	},
 	{
 		id: "03",
 		title: "Digital Marketing",
-		description: "Social media management, SEO/SEM, campaigns, and strategic marketing plans",
+		description: "Marketing strategies and plans, social media management, graphic design & Reels, motion graphic 2D & 3D, infographics, ads management SMM, SEO & SEM, marketing campaigns & media buying, periodic reporting",
 		image: "/frames/Frame_0003.jpeg",
 	},
 	{
 		id: "04",
 		title: "Content Creation",
-		description: "Creative writing, visual content, audio, interactive and trending content solutions",
+		description: "Writing creative content, visual content, audio content, interactive content, trending content, static visual content",
 		image: "/frames/Frame_0004.jpeg",
 	},
 	{
 		id: "05",
 		title: "Technology Solutions",
-		description: "Website and application development, UI/UX design, and automation services",
+		description: "Website development, application development, front-end, back-end, UI/UX, automation",
 		image: "/frames/Frame_0005.jpeg",
 	},
 	{
 		id: "06",
 		title: "Photography",
-		description: "Portrait, corporate, food, product, architectural photography and events coverage",
+		description: "Portrait photography, corporate photography, food photography, product photography, architectural photography, events coverage",
 		image: "/frames/Frame_0006.jpeg",
 	},
 	{
 		id: "07",
 		title: "Video Production",
-		description: "Commercial videos, film production, documentaries, editing, and motion graphics",
+		description: "Commercial & TV video production, film production, documentaries, events media coverage, video editing, sound record & sound design, motion graphic 2D & 3D, animation",
 		image: "/frames/Frame_0007.jpeg",
 	},
 ];
@@ -111,6 +114,17 @@ function QuestionText() {
 }
 
 export default function Home() {
+	// Scroll to top on page load/refresh
+	useEffect(() => {
+		window.scrollTo(0, 0);
+		// Also handle browser back/forward navigation
+		const handlePopState = () => {
+			window.scrollTo(0, 0);
+		};
+		window.addEventListener("popstate", handlePopState);
+		return () => window.removeEventListener("popstate", handlePopState);
+	}, []);
+
 	return (
 		<main>
 			<Header />

@@ -15,7 +15,6 @@ interface CometCardStackProps {
 	className?: string;
 	staggerDelay?: number;
 }
-
 export function CometCardStack({
 	cards,
 	className = "",
