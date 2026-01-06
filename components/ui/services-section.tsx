@@ -134,13 +134,13 @@ export function ServicesSection({ services }: ServicesSectionProps) {
 										}`}
 										priority={index < 2}
 									/>
-									{/* Overlay gradient */}
-									<div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+									{/* Overlay gradient - dark blue to match theme */}
+									<div className="absolute inset-0 bg-gradient-to-t from-blue-950/80 via-blue-900/40 to-transparent" />
 								</div>
 
 								{/* Progress Bar */}
 								{isActive && (
-									<div className="absolute top-0 left-0 right-0 h-1 bg-black/30 z-20">
+									<div className="absolute top-0 left-0 right-0 h-1 bg-blue-950/30 z-20">
 										<div
 											className="h-full bg-gradient-to-r from-white to-pink-400 transition-all duration-75 ease-linear"
 											style={{ width: `${progress}%` }}
