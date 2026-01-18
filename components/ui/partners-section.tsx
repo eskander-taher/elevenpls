@@ -36,7 +36,7 @@ export function PartnersSection({ partners = defaultPartners }: PartnersSectionP
 
 	const row1Ref = useRef<HTMLDivElement>(null);
 	const row2Ref = useRef<HTMLDivElement>(null);
-	const animationFrameRef = useRef<number>();
+	const animationFrameRef = useRef<number>(null);
 	const position1Ref = useRef(0);
 	const position2Ref = useRef(0);
 	const row2WidthRef = useRef(0);
