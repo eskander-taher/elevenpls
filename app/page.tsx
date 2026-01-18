@@ -11,6 +11,8 @@ import { HiMenuAlt3 } from "react-icons/hi";
 import { HeroScrollSection } from "@/components/ui/hero-scroll-section";
 import { ScrollHeader } from "@/components/ui/scroll-header";
 import { ServicesSection } from "@/components/ui/services-section";
+import { PartnersSection } from "@/components/ui/partners-section";
+import { SocialBar } from "@/components/ui/social-bar";
 import Image from "next/image";
 
 const cards: CardItem[] = [
@@ -128,9 +130,11 @@ export default function Home() {
 	return (
 		<main>
 			<Header />
+			<SocialBar />
 			<HeroScrollSection questionText={<QuestionText />} answers={answers} />
 			<ServicesSection services={services} />
 			<CometCardStack cards={cards} />
+			<PartnersSection />
 		</main>
 	);
 }

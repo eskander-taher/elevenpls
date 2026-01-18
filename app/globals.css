@@ -52,3 +52,40 @@ body::-webkit-scrollbar,
 .animate-border-spin {
   animation: border-spin 3s linear infinite;
 }
+
+/* Infinite scrolling animations for partner logos */
+@keyframes scroll-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scroll-right {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-scroll-left {
+  animation: scroll-left 40s linear infinite;
+  will-change: transform;
+}
+
+.animate-scroll-right {
+  animation: scroll-right 45s linear infinite;
+  will-change: transform;
+}
+
+/* Pause animation on hover for better UX */
+@media (hover: hover) {
+  .animate-scroll-left:hover,
+  .animate-scroll-right:hover {
+    animation-play-state: paused;
+  }
+}
