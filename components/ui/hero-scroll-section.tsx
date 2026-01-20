@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import { LuCornerDownLeft, LuCornerUpRight } from "react-icons/lu";
+
 
 const TOTAL_FRAMES = 40;
 
@@ -109,7 +111,23 @@ function AnswerItem({ children, progress, startProgress, isLeft }: AnswerItemPro
 				filter: blur > 0 ? `blur(${blur}px)` : "none",
 			}}
 		>
-			{children}
+			<div className="relative inline-block px-10 py-6">
+			{/* Top-left corner mark */}
+			<LuCornerUpRight
+				className="absolute left-2 top-2 text-pink-400/40"
+				size={22}
+			/>
+
+			{/* Bottom-right corner mark */}
+			<LuCornerDownLeft
+				className="absolute right-2 bottom-2 text-pink-400/40"
+				size={22}
+			/>
+
+			<div className="text-sm md:text-lg text-white/90 text-center font-mono leading-relaxed">
+				{children}
+			</div>
+		</div>
 		</div>
 	);
 }

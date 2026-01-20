@@ -16,12 +16,43 @@ import { SocialBar } from "@/components/ui/social-bar";
 import Image from "next/image";
 
 const cards: CardItem[] = [
-	{ id: "01", label: ["Understanding", "& Analysis"], icon: <HiOutlineLightBulb /> },
-	{ id: "02", label: ["Strategy", "Development"], icon: <BsGraphUpArrow /> },
-	{ id: "03", label: ["Creative", "Implementation"], icon: <IoColorPaletteOutline /> },
-	{ id: "04", label: ["Interaction", "& Improvement"], icon: <FiRefreshCw /> },
-	{ id: "05", label: ["Evaluation", "& Development"], icon: <TbChartAreaLine /> },
+	{
+		id: "01",
+		label: ["Understanding", "& Analysis"],
+		description:
+			"We begin by deeply understanding your brand, goals, and challenges. Through market research, data analysis, and audience insights, we identify opportunities, risks, and the real problems that need to be solved before any creative or technical work begins.",
+		icon: <HiOutlineLightBulb />,
+	},
+	{
+		id: "02",
+		label: ["Strategy", "Development"],
+		description:
+			"Based on insights and data, we design a clear and actionable strategy. This stage defines positioning, priorities, and success metrics, ensuring every decision is aligned with your business objectives and long-term growth.",
+		icon: <BsGraphUpArrow />,
+	},
+	{
+		id: "03",
+		label: ["Creative", "Implementation"],
+		description:
+			"Strategy is transformed into reality through design, content, and technology. We create visuals, experiences, and solutions that communicate your message clearly while maintaining consistency, quality, and impact across all platforms.",
+		icon: <IoColorPaletteOutline />,
+	},
+	{
+		id: "04",
+		label: ["Interaction", "& Improvement"],
+		description:
+			"We observe how users interact with the product or campaign and continuously refine the experience. Through feedback, testing, and performance monitoring, we improve usability, engagement, and overall effectiveness.",
+		icon: <FiRefreshCw />,
+	},
+	{
+		id: "05",
+		label: ["Evaluation", "& Development"],
+		description:
+			"We measure results against defined goals, analyze performance data, and extract meaningful insights. These findings guide future improvements, helping your brand evolve, scale, and remain competitive over time.",
+		icon: <TbChartAreaLine />,
+	},
 ];
+
 
 const answers = [
 	"We craft digital experiences",

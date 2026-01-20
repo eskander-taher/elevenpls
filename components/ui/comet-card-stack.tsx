@@ -1,13 +1,20 @@
 "use client";
 
 import { useState, useRef, useEffect, type ReactNode } from "react";
-import { motion, useScroll, useMotionValueEvent } from "motion/react";
+import {
+	motion,
+	AnimatePresence,
+	useScroll,
+	useMotionValueEvent,
+} from "motion/react";
 import { CometCard } from "./comet-card";
+import { FaQuoteLeft, FaQuoteRight } from "react-icons/fa";
 
 export interface CardItem {
 	id: string;
 	label: [string, string];
 	icon: ReactNode;
+	description: string;
 }
 
 interface CometCardStackProps {
@@ -30,21 +37,15 @@ export function CometCardStack({
 	});
 
 	useMotionValueEvent(scrollYProgress, "change", (latest) => {
-		// Section is in view when scroll progress is between thresholds
-		// 0 = section top is at viewport bottom
-		// 1 = section bottom is at viewport top
-		// Cards collapse when ~40% of section is still visible
 		const inViewRange = latest > 0.35 && latest < 0.65;
 		setIsInView(inViewRange);
 	});
 
-	// Initial check on mount
 	useEffect(() => {
 		const checkInitialVisibility = () => {
 			if (sectionRef.current) {
 				const rect = sectionRef.current.getBoundingClientRect();
 				const windowHeight = window.innerHeight;
-				// Match the scroll thresholds (~40% visible on each side)
 				const inView = rect.top < windowHeight * 0.5 && rect.bottom > windowHeight * 0.5;
 				setIsInView(inView);
 			}
@@ -52,16 +53,12 @@ export function CometCardStack({
 		checkInitialVisibility();
 	}, []);
 
-	// Reset hover state when cards collapse
 	useEffect(() => {
-		if (!isInView) {
-			setHoveredIndex(null);
-		}
+		if (!isInView) setHoveredIndex(null);
 	}, [isInView]);
 
 	const totalCards = cards.length;
 
-	// Responsive spacing values
 	const cardSpacing = {
 		mobile: 80,
 		tablet: 150,
@@ -74,11 +71,12 @@ export function CometCardStack({
 		desktop: 30,
 	};
 
-	// Calculate center position for stacked state
 	const getCenterOffset = (spacing: number, vertical: number) => ({
 		centerX: ((totalCards - 1) * spacing) / 2,
 		centerY: ((totalCards - 1) * vertical) / 2,
 	});
+
+	const hoveredCard = hoveredIndex !== null ? cards[hoveredIndex] : null;
 
 	return (
 		<section
@@ -87,7 +85,6 @@ export function CometCardStack({
 		>
 			<div className="mx-auto flex-1 flex flex-col justify-center w-full">
 				<div className="max-w-7xl mx-auto w-full">
-					{/* Section Title */}
 					<div className="w-full mb-4 md:mb-6 text-left">
 						<h2
 							className="text-4xl md:text-5xl lg:text-6xl font-bold bg-clip-text text-transparent"
@@ -118,194 +115,251 @@ export function CometCardStack({
 							</motion.div>
 						))}
 					</div>
+
 					{/* Tablet: Staggered horizontal layout */}
 					<div className="flex justify-center items-center hidden md:block lg:hidden">
-						<div
-							className="relative mx-auto"
-							style={{
-								height: `${400 + totalCards * verticalOffset.tablet}px`,
-								width: `${(totalCards - 1) * cardSpacing.tablet + 256}px`,
-							}}
-						>
-							{(() => {
-								const { centerX, centerY } = getCenterOffset(
-									cardSpacing.tablet,
-									verticalOffset.tablet
-								);
+						{(() => {
+							const width = (totalCards - 1) * cardSpacing.tablet + 256;
+							const height = 400 + totalCards * verticalOffset.tablet;
 
-								return cards.map((card, index) => (
-									<motion.div
-										key={card.id}
-										className="absolute"
-										initial={{
-											left: centerX,
-											bottom: centerY,
-											opacity: 0,
-											scale: 0.9,
-										}}
-										animate={
-											isInView
-												? {
-														left: index * cardSpacing.tablet,
-														bottom: index * verticalOffset.tablet,
-														opacity: 1,
-														scale: 1,
-												  }
-												: {
-														left: centerX + index * 20,
-														bottom: centerY + index * 8,
-														opacity: 1,
-														scale: 0.95,
-												  }
-										}
-										transition={{
-											duration: 0.7,
-											delay: isInView
-												? Math.min(index, totalCards - 1 - index) *
-												  staggerDelay
-												: (totalCards - 1 - index) * 0.05,
-											ease: [0.22, 1, 0.36, 1],
-										}}
-										style={{
-											zIndex:
-												hoveredIndex === index ? 100 : totalCards - index,
-											filter: !isInView
-												? "none"
-												: hoveredIndex === null || hoveredIndex === index
-												? "none"
-												: "blur(2px)",
-										}}
-										onMouseEnter={() => isInView && setHoveredIndex(index)}
-										onMouseLeave={() => isInView && setHoveredIndex(null)}
-									>
-										<motion.div
-											animate={{
-												opacity: !isInView
-													? 1
-													: hoveredIndex === null
-													? 1
-													: hoveredIndex === index
-													? 1
-													: 0.3,
-											}}
-											transition={{ duration: 0.3 }}
-										>
-											<CometCard
-												initialRotateY={-25}
-												initialRotateX={-15}
-												initialRotateZ={3}
-												disabled={!isInView}
+							return (
+								<div className="relative mx-auto" style={{ width, height }}>
+									{(() => {
+										const { centerX, centerY } = getCenterOffset(
+											cardSpacing.tablet,
+											verticalOffset.tablet
+										);
+
+										return cards.map((card, index) => (
+											<motion.div
+												key={card.id}
+												className="absolute"
+												initial={{
+													left: centerX,
+													bottom: centerY,
+													opacity: 0,
+													scale: 0.9,
+												}}
+												animate={
+													isInView
+														? {
+																left: index * cardSpacing.tablet,
+																bottom: index * verticalOffset.tablet,
+																opacity: 1,
+																scale: 1,
+														  }
+														: {
+																left: centerX + index * 20,
+																bottom: centerY + index * 8,
+																opacity: 1,
+																scale: 0.95,
+														  }
+												}
+												transition={{
+													duration: 0.7,
+													delay: isInView
+														? Math.min(index, totalCards - 1 - index) * staggerDelay
+														: (totalCards - 1 - index) * 0.05,
+													ease: [0.22, 1, 0.36, 1],
+												}}
+												style={{
+													zIndex: hoveredIndex === index ? 100 : totalCards - index,
+													filter: !isInView
+														? "none"
+														: hoveredIndex === null || hoveredIndex === index
+														? "none"
+														: "blur(2px)",
+												}}
+												onMouseEnter={() => isInView && setHoveredIndex(index)}
+												onMouseLeave={() => isInView && setHoveredIndex(null)}
 											>
-												<CardContent
-													index={index}
-													label={card.label}
-													icon={card.icon}
-													size="tablet"
-													isHovered={hoveredIndex === index && isInView}
-												/>
-											</CometCard>
-										</motion.div>
-									</motion.div>
-								));
-							})()}
-						</div>
+												<motion.div
+													animate={{
+														opacity: !isInView
+															? 1
+															: hoveredIndex === null
+															? 1
+															: hoveredIndex === index
+															? 1
+															: 0.3,
+													}}
+													transition={{ duration: 0.3 }}
+												>
+													<CometCard
+														initialRotateY={-25}
+														initialRotateX={-15}
+														initialRotateZ={3}
+														disabled={!isInView}
+													>
+														<CardContent
+															index={index}
+															label={card.label}
+															icon={card.icon}
+															size="tablet"
+															isHovered={hoveredIndex === index && isInView}
+														/>
+													</CometCard>
+												</motion.div>
+											</motion.div>
+										));
+									})()}
+
+									{/* ✅ Hover text bar (full width), fades in/out */}
+									<HoverStackBar
+										isInView={isInView}
+										hoveredCard={hoveredCard}
+									/>
+								</div>
+							);
+						})()}
 					</div>
+
 					{/* Desktop: Full staggered layout */}
 					<div className="flex justify-center items-center hidden lg:block">
-						<div
-							className="relative mx-auto"
-							style={{
-								height: `${300 + totalCards * verticalOffset.desktop}px`,
-								width: `${(totalCards - 1) * cardSpacing.desktop + 288}px`,
-							}}
-						>
-							{(() => {
-								const { centerX, centerY } = getCenterOffset(
-									cardSpacing.desktop,
-									verticalOffset.desktop
-								);
-								return cards.map((card, index) => (
-									<motion.div
-										key={card.id}
-										className="absolute"
-										initial={{
-											left: centerX,
-											bottom: centerY,
-											opacity: 0,
-											scale: 0.9,
-										}}
-										animate={
-											isInView
-												? {
-														left: index * cardSpacing.desktop,
-														bottom: index * verticalOffset.desktop,
-														opacity: 1,
-														scale: 1,
-												  }
-												: {
-														left: centerX + index * 25,
-														bottom: centerY + index * 10,
-														opacity: 1,
-														scale: 0.95,
-												  }
-										}
-										transition={{
-											duration: 0.7,
-											delay: isInView
-												? Math.min(index, totalCards - 1 - index) *
-												  staggerDelay
-												: (totalCards - 1 - index) * 0.05,
-											ease: [0.22, 1, 0.36, 1],
-										}}
-										style={{
-											zIndex:
-												hoveredIndex === index ? 100 : totalCards - index,
-											filter: !isInView
-												? "none"
-												: hoveredIndex === null || hoveredIndex === index
-												? "none"
-												: "blur(2px)",
-										}}
-										onMouseEnter={() => isInView && setHoveredIndex(index)}
-										onMouseLeave={() => isInView && setHoveredIndex(null)}
-									>
-										<motion.div
-											animate={{
-												opacity: !isInView
-													? 1
-													: hoveredIndex === null
-													? 1
-													: hoveredIndex === index
-													? 1
-													: 0.3,
-											}}
-											transition={{ duration: 0.3 }}
-										>
-											<CometCard
-												initialRotateY={-20}
-												initialRotateX={-12}
-												initialRotateZ={2}
-												disabled={!isInView}
+						{(() => {
+							const width = (totalCards - 1) * cardSpacing.desktop + 288;
+							const height = 300 + totalCards * verticalOffset.desktop;
+
+							return (
+								<div className="relative mx-auto" style={{ width, height }}>
+									{(() => {
+										const { centerX, centerY } = getCenterOffset(
+											cardSpacing.desktop,
+											verticalOffset.desktop
+										);
+										return cards.map((card, index) => (
+											<motion.div
+												key={card.id}
+												className="absolute"
+												initial={{
+													left: centerX,
+													bottom: centerY,
+													opacity: 0,
+													scale: 0.9,
+												}}
+												animate={
+													isInView
+														? {
+																left: index * cardSpacing.desktop,
+																bottom: index * verticalOffset.desktop,
+																opacity: 1,
+																scale: 1,
+														  }
+														: {
+																left: centerX + index * 25,
+																bottom: centerY + index * 10,
+																opacity: 1,
+																scale: 0.95,
+														  }
+												}
+												transition={{
+													duration: 0.7,
+													delay: isInView
+														? Math.min(index, totalCards - 1 - index) * staggerDelay
+														: (totalCards - 1 - index) * 0.05,
+													ease: [0.22, 1, 0.36, 1],
+												}}
+												style={{
+													zIndex: hoveredIndex === index ? 100 : totalCards - index,
+													filter: !isInView
+														? "none"
+														: hoveredIndex === null || hoveredIndex === index
+														? "none"
+														: "blur(2px)",
+												}}
+												onMouseEnter={() => isInView && setHoveredIndex(index)}
+												onMouseLeave={() => isInView && setHoveredIndex(null)}
 											>
-												<CardContent
-													index={index}
-													label={card.label}
-													icon={card.icon}
-													size="desktop"
-													isHovered={hoveredIndex === index && isInView}
-												/>
-											</CometCard>
-										</motion.div>
-									</motion.div>
-								));
-							})()}
-						</div>
+												<motion.div
+													animate={{
+														opacity: !isInView
+															? 1
+															: hoveredIndex === null
+															? 1
+															: hoveredIndex === index
+															? 1
+															: 0.3,
+													}}
+													transition={{ duration: 0.3 }}
+												>
+													<CometCard
+														initialRotateY={-20}
+														initialRotateX={-12}
+														initialRotateZ={2}
+														disabled={!isInView}
+													>
+														<CardContent
+															index={index}
+															label={card.label}
+															icon={card.icon}
+															size="desktop"
+															isHovered={hoveredIndex === index && isInView}
+														/>
+													</CometCard>
+												</motion.div>
+											</motion.div>
+										));
+									})()}
+
+									{/* ✅ Hover text bar (full width), fades in/out */}
+									<HoverStackBar
+										isInView={isInView}
+										hoveredCard={hoveredCard}
+									/>
+								</div>
+							);
+						})()}
 					</div>
 				</div>
 			</div>
 		</section>
 	);
 }
+
+/** Appears at the bottom of the stacked area when hovering a card */
+function HoverStackBar({
+	isInView,
+	hoveredCard,
+}: {
+	isInView: boolean;
+	hoveredCard: CardItem | null;
+}) {
+	return (
+		<div className="absolute left-0 right-0 -bottom-28 pointer-events-none">
+			<AnimatePresence mode="wait">
+				{isInView && hoveredCard ? (
+					<motion.div
+						key={hoveredCard.id}
+						initial={{ opacity: 0, y: -20 }}
+						animate={{ opacity: 1, y: 0 }}
+						exit={{ opacity: 0, y: 6 }}
+						transition={{ duration: 0.5, ease: [0.4, 1, 0.36, 1] }}
+						className="relative"
+					>
+						<div className="relative w-full px-10 py-6">
+							{/* Opening quote */}
+							<FaQuoteLeft
+								className="absolute left-2 top-2 text-pink-400/40"
+								size={22}
+							/>
+
+							{/* Closing quote */}
+							<FaQuoteRight
+								className="absolute right-2 bottom-2 text-pink-400/40"
+								size={22}
+							/>
+
+							<p className="text-sm md:text-base text-center font-mono text-white leading-relaxed">
+								{hoveredCard.description}
+							</p>
+						</div>
+					</motion.div>
+				) : null}
+			</AnimatePresence>
+		</div>
+	);
+}
+
 
 interface CardContentProps {
 	index: number;
@@ -327,12 +381,10 @@ function CardContent({ index, label, icon, size = "mobile", isHovered = false }:
 			className={`relative flex ${sizeClasses[size]} cursor-pointer flex-col items-stretch rounded-2xl border-0 bg-blue-950 p-3 md:p-4 overflow-hidden`}
 			style={{ transformStyle: "preserve-3d" }}
 		>
-			{/* Card number */}
 			<p className="absolute left-4 top-4 z-10 font-mono text-lg font-bold text-pink-400">
 				{String(index + 1).padStart(2, "0")}
 			</p>
 
-			{/* Icon */}
 			<div className="absolute inset-0 flex items-center justify-center pb-12">
 				<div
 					className="transition-all duration-500"
@@ -350,7 +402,6 @@ function CardContent({ index, label, icon, size = "mobile", isHovered = false }:
 				</div>
 			</div>
 
-			{/* Label */}
 			<div className="relative z-10 mt-auto flex shrink-0 items-end justify-end p-4 font-mono text-white">
 				<div className="text-left text-sm leading-tight md:text-base">
 					<div>{label[0]}</div>
@@ -361,7 +412,6 @@ function CardContent({ index, label, icon, size = "mobile", isHovered = false }:
 	);
 }
 
-// Simplified mobile card component
 interface MobileCardProps {
 	index: number;
 	label: [string, string];
@@ -371,19 +421,16 @@ interface MobileCardProps {
 function MobileCard({ index, label, icon }: MobileCardProps) {
 	return (
 		<div className="relative flex aspect-square w-full cursor-pointer flex-col rounded-xl bg-blue-950 p-3 overflow-hidden">
-			{/* Card number */}
 			<p className="font-mono text-sm font-bold text-pink-400">
 				{String(index + 1).padStart(2, "0")}
 			</p>
 
-			{/* Icon */}
 			<div className="absolute inset-0 flex items-center justify-center">
 				<div className="text-white/15" style={{ fontSize: "80px" }}>
 					{icon}
 				</div>
 			</div>
 
-			{/* Label */}
 			<div className="relative z-10 mt-auto font-mono text-white">
 				<div className="text-xs leading-tight">
 					<div>{label[0]}</div>
