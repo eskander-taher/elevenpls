@@ -13,6 +13,7 @@ import { ScrollHeader } from "@/components/ui/scroll-header";
 import { ServicesSection } from "@/components/ui/services-section";
 import { PartnersSection } from "@/components/ui/partners-section";
 import { SocialBar } from "@/components/ui/social-bar";
+import { FooterSection } from "@/components/ui/footer-section";
 import Image from "next/image";
 
 const cards: CardItem[] = [
@@ -122,9 +123,9 @@ function Header() {
 			</div>
 			{/* Right side: CTA + Hamburger */}
 			<div className="flex items-center gap-4">
-				<button className="hidden sm:block px-5 py-2.5 bg-white text-black text-sm font-medium rounded-full hover:bg-pink-100 transition-colors">
-					Start your success
-				</button>
+				<div className="cta-button hidden sm:flex" role="button" tabIndex={0}>
+					<span>Start your success</span>
+				</div>
 				<button className="p-2 text-pink-400 hover:text-pink-300 transition-colors">
 					<HiMenuAlt3 className="w-7 h-7" />
 				</button>
@@ -166,6 +167,7 @@ export default function Home() {
 			<ServicesSection services={services} />
 			<CometCardStack cards={cards} />
 			<PartnersSection />
+			<FooterSection />
 		</main>
 	);
 }
