@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CometCardStack, type CardItem } from "@/components/ui/comet-card-stack";
 import { BsGraphUpArrow } from "react-icons/bs";
 import { IoColorPaletteOutline } from "react-icons/io5";
@@ -107,10 +107,15 @@ const services = [
 	},
 ];
 
-function Header() {
+function Header({
+	onMenuOpen,
+	menuOpen,
+}: {
+	onMenuOpen: () => void;
+	menuOpen: boolean;
+}) {
 	return (
 		<ScrollHeader>
-			{/* Logo */}
 			<div className="flex items-center">
 				<Image
 					src="/logo.svg"
@@ -121,16 +126,83 @@ function Header() {
 					priority
 				/>
 			</div>
-			{/* Right side: CTA + Hamburger */}
 			<div className="flex items-center gap-4">
 				<div className="cta-button hidden sm:flex" role="button" tabIndex={0}>
 					<span>Start your success</span>
 				</div>
-				<button className="p-2 text-pink-400 hover:text-pink-300 transition-colors">
+				<button
+					className="p-2 text-pink-400 hover:text-pink-300 transition-colors"
+					type="button"
+					aria-label="Open menu"
+					aria-controls="site-menu"
+					aria-expanded={menuOpen}
+					onClick={onMenuOpen}
+				>
 					<HiMenuAlt3 className="w-7 h-7" />
 				</button>
 			</div>
 		</ScrollHeader>
+	);
+}
+
+function NavOverlay({
+	isOpen,
+	onClose,
+	onNavigate,
+	items,
+}: {
+	isOpen: boolean;
+	onClose: () => void;
+	onNavigate: (id: string) => void;
+	items: Array<{ id: string; label: string }>;
+}) {
+	if (!isOpen) return null;
+
+	return (
+		<div className="fixed inset-0 z-[60]">
+			<button
+				type="button"
+				aria-label="Close menu"
+				className="absolute inset-0 bg-black/60"
+				onClick={onClose}
+			/>
+			<div
+				id="site-menu"
+				className="absolute right-0 top-0 h-full w-full max-w-sm bg-[#06081d] border-l border-white/10 p-6 flex flex-col"
+			>
+				<div className="flex items-center justify-between">
+					<div className="flex items-center gap-3">
+						<Image src="/logo.svg" alt="11+" width={64} height={28} className="h-7 w-auto" />
+					</div>
+					<button
+						type="button"
+						className="rounded-full border border-white/15 px-3 py-1.5 text-sm text-white/80 hover:text-white hover:border-white/25 transition-colors"
+						onClick={onClose}
+					>
+						Close
+					</button>
+				</div>
+				<nav className="mt-10 flex-1">
+					<ul className="space-y-3">
+						{items.map((item) => (
+							<li key={item.id}>
+								<button
+									type="button"
+									className="w-full text-left rounded-xl px-4 py-3 border border-white/10 bg-white/5 text-white/90 hover:bg-white/10 hover:border-white/20 transition-colors"
+									onClick={() => onNavigate(item.id)}
+								>
+									{item.label}
+								</button>
+							</li>
+						))}
+					</ul>
+				</nav>
+				<div className="pt-6 border-t border-white/10 text-sm text-white/70">
+					<div>+966 50 227 6773</div>
+					<div>Sales@elevenpls.com</div>
+				</div>
+			</div>
+		</div>
 	);
 }
 
@@ -148,6 +220,19 @@ function QuestionText() {
 }
 
 export default function Home() {
+	const [menuOpen, setMenuOpen] = useState(false);
+
+	const navItems = useMemo(
+		() => [
+			{ id: "top", label: "Home" },
+			{ id: "services", label: "Services" },
+			{ id: "process", label: "Process" },
+			{ id: "partners", label: "Partners" },
+			{ id: "contact", label: "Contact" },
+		],
+		[]
+	);
+
 	// Scroll to top on page load/refresh
 	useEffect(() => {
 		window.scrollTo(0, 0);
@@ -159,15 +244,46 @@ export default function Home() {
 		return () => window.removeEventListener("popstate", handlePopState);
 	}, []);
 
+	useEffect(() => {
+		if (!menuOpen) return;
+		const onKeyDown = (e: KeyboardEvent) => {
+			if (e.key === "Escape") setMenuOpen(false);
+		};
+		window.addEventListener("keydown", onKeyDown);
+		return () => window.removeEventListener("keydown", onKeyDown);
+	}, [menuOpen]);
+
+	const navigateTo = (id: string) => {
+		setMenuOpen(false);
+		const el = document.getElementById(id);
+		if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+	};
+
 	return (
-		<main>
-			<Header />
+		<main id="top">
+			<Header menuOpen={menuOpen} onMenuOpen={() => setMenuOpen(true)} />
+			<NavOverlay
+				isOpen={menuOpen}
+				onClose={() => setMenuOpen(false)}
+				onNavigate={navigateTo}
+				items={navItems}
+			/>
 			<SocialBar />
-			<HeroScrollSection questionText={<QuestionText />} answers={answers} />
-			<ServicesSection services={services} />
-			<CometCardStack cards={cards} />
-			<PartnersSection />
-			<FooterSection />
+			<section id="hero">
+				<HeroScrollSection questionText={<QuestionText />} answers={answers} />
+			</section>
+			<section id="services">
+				<ServicesSection services={services} />
+			</section>
+			<section id="process">
+				<CometCardStack cards={cards} />
+			</section>
+			<section id="partners">
+				<PartnersSection />
+			</section>
+			<section id="contact">
+				<FooterSection />
+			</section>
 		</main>
 	);
 }

@@ -89,6 +89,11 @@ body::-webkit-scrollbar,
     animation-play-state: paused;
   }
 }
+@supports (font-variation-settings: normal) {
+  :root {
+    font-family: "Inter var", sans-serif;
+  }
+}
 
 @property --b-r {
   syntax: "<angle>";
@@ -102,7 +107,7 @@ body::-webkit-scrollbar,
   initial-value: 28px;
 }
 
-.cta-button {
+#b {
   width: 220px;
   height: 44px;
   position: relative;
@@ -117,7 +122,7 @@ body::-webkit-scrollbar,
   transition: box-shadow 0.25s ease;
 }
 
-.cta-button span {
+#b span {
   position: relative;
   z-index: 2;
   color: #fff;
@@ -126,45 +131,25 @@ body::-webkit-scrollbar,
   letter-spacing: 0.2px;
 }
 
-.cta-button::before {
+#b::before {
   content: "";
   position: absolute;
   inset: -40px;
   border-radius: 50px;
   z-index: 0;
-  background-image: conic-gradient(
-    from calc(var(--b-r) - 80deg) at var(--b-x) 50%,
-    rgba(255, 20, 147, 0.15) 0%,
-    rgba(255, 20, 147, 0.95) 16%,
-    rgba(255, 255, 255, 0.95) 22%,
-    rgba(255, 20, 147, 0.15) 28%,
-    rgba(255, 20, 147, 0) 60%
-  );
+  background-image:
+    conic-gradient(
+      from calc(var(--b-r) - 80deg) at var(--b-x) 50%,
+      rgba(255, 20, 147, 0.15) 0%,
+      rgba(255, 20, 147, 0.95) 16%,
+      rgba(255, 255, 255, 0.95) 22%,
+      rgba(255, 20, 147, 0.15) 28%,
+      rgba(255, 20, 147, 0) 60%
+    );
   filter: blur(0px);
   opacity: 0.9;
   transition: opacity 0.25s ease;
   animation: -0.64s b-rot 3s linear infinite, -0.64s b-x 3s linear infinite;
-}
-
-.cta-button::after {
-  content: "";
-  display: block;
-  position: absolute;
-  background: #0b1033;
-  inset: 4px;
-  border-radius: 46px;
-  z-index: 1;
-}
-
-.cta-button:hover::before {
-  opacity: 0;
-}
-
-.cta-button:hover {
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.15),
-    0 0 30px rgba(255, 20, 147, 0.55),
-    0 0 40px rgba(255, 255, 255, 0.25);
 }
 
 @keyframes b-x {
@@ -201,4 +186,25 @@ body::-webkit-scrollbar,
   100% {
     --b-r: 360deg;
   }
+}
+
+#b::after {
+  content: "";
+  display: block;
+  position: absolute;
+  background: #0b1033;
+  inset: 4px;
+  border-radius: 46px;
+  z-index: 1;
+}
+
+#b:hover::before {
+  opacity: 0;
+}
+
+#b:hover {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.15),
+    0 0 30px rgba(255, 20, 147, 0.55),
+    0 0 40px rgba(255, 255, 255, 0.25);
 }
