@@ -11,27 +11,53 @@ interface PartnerLogo {
 
 interface PartnersSectionProps {
 	partners?: PartnerLogo[];
+	topPartners?: PartnerLogo[];
+	bottomPartners?: PartnerLogo[];
 }
 
 // Default placeholder partners if none provided
-const defaultPartners: PartnerLogo[] = [
-	{ id: "1", name: "Partner 1" },
-	{ id: "2", name: "Partner 2" },
-	{ id: "3", name: "Partner 3" },
-	{ id: "4", name: "Partner 4" },
-	{ id: "5", name: "Partner 5" },
-	{ id: "6", name: "Partner 6" },
-	{ id: "7", name: "Partner 7" },
-	{ id: "8", name: "Partner 8" },
-	{ id: "9", name: "Partner 9" },
-	{ id: "10", name: "Partner 10" },
+const defaultTopPartners: PartnerLogo[] = [
+	{ id: "p1-1", name: "Partner 1", logo: "/partners/1/Asset%201.svg" },
+	{ id: "p1-2", name: "Partner 2", logo: "/partners/1/Asset%202.svg" },
+	{ id: "p1-3", name: "Partner 3", logo: "/partners/1/Asset%203.svg" },
+	{ id: "p1-4", name: "Partner 4", logo: "/partners/1/Asset%204.svg" },
+	{ id: "p1-5", name: "Partner 5", logo: "/partners/1/Asset%205.svg" },
+	{ id: "p1-6", name: "Partner 6", logo: "/partners/1/Asset%206.svg" },
+	{ id: "p1-7", name: "Partner 7", logo: "/partners/1/Asset%207.svg" },
+	{ id: "p1-8", name: "Partner 8", logo: "/partners/1/Asset%208.svg" },
+	{ id: "p1-9", name: "Partner 9", logo: "/partners/1/Asset%209.svg" },
+	{ id: "p1-10", name: "Partner 10", logo: "/partners/1/Asset%2010.svg" },
+	{ id: "p1-11", name: "Partner 11", logo: "/partners/1/Asset%2011.svg" },
+	{ id: "p1-12", name: "Partner 12", logo: "/partners/1/Asset%2012.svg" },
 ];
 
-export function PartnersSection({ partners = defaultPartners }: PartnersSectionProps) {
-	// Duplicate partners array to ensure seamless scrolling (need at least 2 copies)
-	const duplicatedPartners = [...partners, ...partners];
+const defaultBottomPartners: PartnerLogo[] = [
+	{ id: "p2-13", name: "Partner 13", logo: "/partners/2/Asset%2013.svg" },
+	{ id: "p2-14", name: "Partner 14", logo: "/partners/2/Asset%2014.svg" },
+	{ id: "p2-15", name: "Partner 15", logo: "/partners/2/Asset%2015.svg" },
+	{ id: "p2-16", name: "Partner 16", logo: "/partners/2/Asset%2016.svg" },
+	{ id: "p2-17", name: "Partner 17", logo: "/partners/2/Asset%2017.svg" },
+	{ id: "p2-18", name: "Partner 18", logo: "/partners/2/Asset%2018.svg" },
+	{ id: "p2-19", name: "Partner 19", logo: "/partners/2/Asset%2019.svg" },
+	{ id: "p2-20", name: "Partner 20", logo: "/partners/2/Asset%2020.svg" },
+	{ id: "p2-21", name: "Partner 21", logo: "/partners/2/Asset%2021.svg" },
+	{ id: "p2-22", name: "Partner 22", logo: "/partners/2/Asset%2022.svg" },
+	{ id: "p2-23", name: "Partner 23", logo: "/partners/2/Asset%2023.svg" },
+	{ id: "p2-24", name: "Partner 24", logo: "/partners/2/Asset%2024.svg" },
+];
+
+export function PartnersSection({
+	partners,
+	topPartners,
+	bottomPartners,
+}: PartnersSectionProps) {
+	const resolvedTopPartners = topPartners ?? partners ?? defaultTopPartners;
+	const resolvedBottomPartners = bottomPartners ?? partners ?? defaultBottomPartners;
+
+	// Duplicate arrays to ensure seamless scrolling (need at least 2 copies)
+	const duplicatedPartners = [...resolvedTopPartners, ...resolvedTopPartners];
 	// Reverse for second row to create opposite scrolling direction
-	const reversedPartners = [...partners].reverse();
+	const reversedPartners = [...resolvedBottomPartners].reverse();
 	const duplicatedReversedPartners = [...reversedPartners, ...reversedPartners];
 
 	const row1Ref = useRef<HTMLDivElement>(null);

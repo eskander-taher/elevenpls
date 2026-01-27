@@ -127,8 +127,11 @@ function Header({
 				/>
 			</div>
 			<div className="flex items-center gap-4">
-				<div className="cta-button hidden sm:flex" role="button" tabIndex={0}>
-					<span>Start your success</span>
+				<div id="b" className="cta-button hidden sm:flex" role="button" tabIndex={0}>
+					<span className="cta-primary">Start your success</span>
+					<span className="cta-secondary" aria-hidden="true">
+						<span>Talk with Ali, Sales of 11+</span>
+					</span>
 				</div>
 				<button
 					className="p-2 text-pink-400 hover:text-pink-300 transition-colors"
@@ -168,7 +171,7 @@ function NavOverlay({
 			/>
 			<div
 				id="site-menu"
-				className="absolute right-0 top-0 h-full w-full max-w-sm bg-[#06081d] border-l border-white/10 p-6 flex flex-col"
+				className="absolute right-0 top-0 h-full w-full max-w-sm bg-[#06081d]  p-6 flex flex-col"
 			>
 				<div className="flex items-center justify-between">
 					<div className="flex items-center gap-3">
@@ -188,7 +191,7 @@ function NavOverlay({
 							<li key={item.id}>
 								<button
 									type="button"
-									className="w-full text-left rounded-xl px-4 py-3 border border-white/10 bg-white/5 text-white/90 hover:bg-white/10 hover:border-white/20 transition-colors"
+									className="w-full text-left rounded-xl px-4 py-3  bg-white/5 text-white/90 hover:bg-white/10 hover:border-white/20 transition-colors"
 									onClick={() => onNavigate(item.id)}
 								>
 									{item.label}
