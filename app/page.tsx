@@ -170,7 +170,7 @@ function NavOverlay({
 		}
 
 		setIsActive(false);
-		const t = window.setTimeout(() => setShouldRender(false), 250);
+		const t = window.setTimeout(() => setShouldRender(false), 300);
 		return () => window.clearTimeout(t);
 	}, [isOpen]);
 
@@ -181,14 +181,14 @@ function NavOverlay({
 			<button
 				type="button"
 				aria-label="Close menu"
-				className={`absolute inset-0 bg-black/60 transition-opacity duration-250 ${
+				className={`absolute inset-0 bg-black/60 transition-opacity duration-300 ${
 					isActive ? "opacity-100" : "opacity-0"
 				}`}
 				onClick={onClose}
 			/>
 			<div
 				id="site-menu"
-				className={`absolute right-0 top-0 h-full w-full max-w-sm bg-[#06081d] p-6 flex flex-col transition-all duration-250 ease-out ${
+				className={`absolute right-0 top-0 h-full w-full lg:w-1/3 lg:max-w-none bg-[#0b0f23] p-6 flex flex-col transition-all duration-300 ease-out ${
 					isActive ? "translate-x-0 opacity-100" : "translate-x-8 opacity-0"
 				}`}
 			>
@@ -204,13 +204,13 @@ function NavOverlay({
 						Close
 					</button>
 				</div>
-				<nav className="mt-10 flex-1">
-					<ul className="space-y-3">
+				<nav className="mt-12 flex-1">
+					<ul className="space-y-4 lg:space-y-6">
 						{items.map((item) => (
 							<li key={item.id}>
 								<button
 									type="button"
-									className="inline-flex text-left rounded-xl px-4 py-3 text-xl md:text-2xl font-medium text-white/90 hover:bg-white/10 transition-colors"
+									className="inline-flex text-left rounded-2xl px-5 py-4 lg:px-7 lg:py-5 text-2xl md:text-3xl lg:text-4xl font-medium text-white/90 hover:bg-white/10 transition-colors"
 									onClick={() => onNavigate(item.id)}
 								>
 									{item.label}
@@ -218,7 +218,7 @@ function NavOverlay({
 							</li>
 						))}
 					</ul>
-					<div className="mt-8 border-t border-white/10 pt-6 text-sm leading-relaxed text-white/70">
+					<div className="mt-10 border-t border-white/10 pt-8 text-sm md:text-base leading-relaxed text-white/70">
 						Specializing in providing the best marketing solutions, we make a difference with an innovative strategic vision that combines creativity and true partnership. We chart the path to our clients' success in a unique and innovative way, using our young and creative Saudi cadres to achieve 11+/10 high quality that exceeds our clients' expectations
 					</div>
 				</nav>

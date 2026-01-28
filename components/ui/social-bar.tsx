@@ -7,6 +7,8 @@ import {
 	FaLinkedin,
 	FaYoutube,
 	FaFacebook,
+	FaStore,
+	FaWhatsapp,
 	FaArrowUp,
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "motion/react";
@@ -57,9 +59,7 @@ const defaultSocialLinks: SocialLink[] = [
 ];
 
 export function SocialBar({ socialLinks = defaultSocialLinks }: SocialBarProps) {
-	const [isVisible, setIsVisible] = useState(true);
 	const [scrollProgress, setScrollProgress] = useState(0);
-	const [lastScrollY, setLastScrollY] = useState(0);
 	const gradientId = useId();
 
 	// Throttled scroll handler for performance
@@ -72,27 +72,9 @@ export function SocialBar({ socialLinks = defaultSocialLinks }: SocialBarProps) 
 		// Calculate scroll progress (0 to 100)
 		const progress = maxScroll > 0 ? (currentScrollY / maxScroll) * 100 : 0;
 		setScrollProgress(Math.min(100, Math.max(0, progress)));
-
-		// Determine scroll direction
-		const scrollingUp = currentScrollY < lastScrollY;
-		const scrollDifference = Math.abs(currentScrollY - lastScrollY);
-
-		// Show/hide bar based on scroll direction and position
-		// Always show at the top
-		if (currentScrollY < 100) {
-			setIsVisible(true);
-		} else if (scrollDifference > 5) {
-			// Only toggle visibility if scroll difference is significant (reduces jitter)
-			setIsVisible(scrollingUp);
-		}
-
-		setLastScrollY(currentScrollY);
-	}, [lastScrollY]);
+	}, []);
 
 	useEffect(() => {
-		// Initial scroll position
-		setLastScrollY(window.scrollY);
-
 		// Throttle scroll events for performance
 		let ticking = false;
 		const onScroll = () => {
@@ -118,89 +100,114 @@ export function SocialBar({ socialLinks = defaultSocialLinks }: SocialBarProps) 
 
 	return (
 		<AnimatePresence>
-			{isVisible && (
-				<motion.div
-					initial={{ x: -100, opacity: 0 }}
-					animate={{ x: 0, opacity: 1 }}
-					exit={{ x: -100, opacity: 0 }}
-					transition={{
-						type: "spring",
-						stiffness: 300,
-						damping: 30,
-					}}
-					className="fixed left-4 md:left-6 lg:left-8 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col items-center gap-4"
-				>
-					{/* Social Media Icons */}
-					<div className="flex flex-col gap-3">
-						{socialLinks.map((link) => (
-							<a
-								key={link.id}
-								href={link.href}
-								target="_blank"
-								rel="noopener noreferrer"
-								aria-label={link.label}
-								className="w-12 h-12 flex items-center justify-center rounded-full bg-white/5 backdrop-blur-sm border border-white/10 text-white/70 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-110"
-							>
-								<span className="text-lg">{link.icon}</span>
-							</a>
-						))}
-					</div>
-
-					{/* Divider */}
-					<div className="w-px h-8 bg-white/10" />
-
-					{/* Scroll Progress Indicator */}
-					<button
-						onClick={scrollToTop}
-						aria-label="Scroll to top"
-						className="relative w-12 h-12 flex items-center justify-center rounded-full bg-white/5 backdrop-blur-sm border border-white/10 text-white/70 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-110 group"
+			<motion.div
+				initial={{ x: 100, opacity: 0 }}
+				animate={{ x: 0, opacity: 1 }}
+				exit={{ x: 100, opacity: 0 }}
+				transition={{
+					type: "spring",
+					stiffness: 300,
+					damping: 30,
+				}}
+				className="fixed right-4 md:right-6 lg:right-8 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col items-center gap-4"
+			>
+				{/* Social Media Icons */}
+				<div className="flex flex-col gap-2">
+					<a
+						href="/store"
+						target="_blank"
+						rel="noopener noreferrer"
+						aria-label="Store"
+						className="relative inline-flex items-center text-white/80 hover:text-white transition-colors duration-300 group"
 					>
-						{/* Circular Progress SVG */}
-						<svg
-							className="absolute inset-0 w-full h-full -rotate-90"
-							viewBox="0 0 48 48"
-							aria-hidden="true"
+						<span className="w-12 h-12 flex items-center justify-center rounded-full bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300">
+							<span className="text-lg">
+								<FaStore />
+							</span>
+						</span>
+						<span className="pointer-events-none absolute right-full mr-3 whitespace-nowrap rounded-md bg-[#0b0f23] px-3 py-1 text-sm font-medium text-white/90 border border-white/10 opacity-0 translate-x-1 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0">
+							Store
+						</span>
+					</a>
+					{socialLinks.map((link) => (
+						<a
+							key={link.id}
+							href={link.href}
+							target="_blank"
+							rel="noopener noreferrer"
+							aria-label={link.label}
+							className="w-12 h-12 flex items-center justify-center rounded-full bg-white/5 backdrop-blur-sm border border-white/10 text-white/70 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-110"
 						>
-							{/* Background circle */}
-							<circle
-								cx="24"
-								cy="24"
-								r="20"
-								fill="none"
-								stroke="currentColor"
-								strokeWidth="2"
-								strokeOpacity="0.1"
-							/>
-							{/* Progress circle */}
-							<circle
-								cx="24"
-								cy="24"
-								r="20"
-								fill="none"
-								stroke="currentColor"
-								strokeWidth="2"
-								strokeDasharray={`${2 * Math.PI * 20}`}
-								strokeDashoffset={`${2 * Math.PI * 20 * (1 - scrollProgress / 100)}`}
-								strokeLinecap="round"
-								className="transition-all duration-150 ease-out"
-								style={{
-									stroke: `url(#${gradientId})`,
-								}}
-							/>
-							{/* Gradient definition */}
-							<defs>
-								<linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
-									<stop offset="0%" stopColor="#ffffff" />
-									<stop offset="50%" stopColor="#ff69b4" />
-									<stop offset="100%" stopColor="#ff1493" />
-								</linearGradient>
-							</defs>
-						</svg>
-						{/* Up Arrow Icon */}
-						<FaArrowUp className="relative z-10 text-sm group-hover:translate-y-[-2px] transition-transform duration-300" />
-					</button>
-				</motion.div>
-			)}
+							<span className="text-lg">{link.icon}</span>
+						</a>
+					))}
+					<a
+						href="https://wa.me/966502276773"
+						target="_blank"
+						rel="noopener noreferrer"
+						aria-label="WhatsApp"
+						className="w-14 h-14 flex items-center justify-center rounded-full bg-white/5 backdrop-blur-sm border border-white/10 text-green-500 hover:text-green-400 hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-110"
+					>
+						<span className="text-3xl leading-none">
+							<FaWhatsapp />
+						</span>
+					</a>
+				</div>
+
+				{/* Divider */}
+				<div className="w-px h-8 bg-white/10" />
+
+				{/* Scroll Progress Indicator */}
+				<button
+					onClick={scrollToTop}
+					aria-label="Scroll to top"
+					className="relative w-12 h-12 flex items-center justify-center rounded-full bg-white/5 backdrop-blur-sm border border-white/10 text-white/70 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-110 group"
+				>
+					{/* Circular Progress SVG */}
+					<svg
+						className="absolute inset-0 w-full h-full -rotate-90"
+						viewBox="0 0 48 48"
+						aria-hidden="true"
+					>
+						{/* Background circle */}
+						<circle
+							cx="24"
+							cy="24"
+							r="20"
+							fill="none"
+							stroke="currentColor"
+							strokeWidth="2"
+							strokeOpacity="0.1"
+						/>
+						{/* Progress circle */}
+						<circle
+							cx="24"
+							cy="24"
+							r="20"
+							fill="none"
+							stroke="currentColor"
+							strokeWidth="2"
+							strokeDasharray={`${2 * Math.PI * 20}`}
+							strokeDashoffset={`${2 * Math.PI * 20 * (1 - scrollProgress / 100)}`}
+							strokeLinecap="round"
+							className="transition-all duration-150 ease-out"
+							style={{
+								stroke: `url(#${gradientId})`,
+							}}
+						/>
+						{/* Gradient definition */}
+						<defs>
+							<linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
+								<stop offset="0%" stopColor="#ffffff" />
+								<stop offset="50%" stopColor="#ff69b4" />
+								<stop offset="100%" stopColor="#ff1493" />
+							</linearGradient>
+						</defs>
+					</svg>
+					{/* Up Arrow Icon */}
+					<FaArrowUp className="relative z-10 text-sm group-hover:translate-y-[-2px] transition-transform duration-300" />
+				</button>
+			</motion.div>
 		</AnimatePresence>
 	);
 }

@@ -378,7 +378,7 @@ function CardContent({ index, label, icon, size = "mobile", isHovered = false }:
 
 	return (
 		<div
-			className={`relative flex ${sizeClasses[size]} cursor-pointer flex-col items-stretch rounded-2xl border-0 bg-blue-950 p-3 md:p-4 overflow-hidden`}
+			className={`relative flex ${sizeClasses[size]} cursor-pointer flex-col items-stretch rounded-2xl border border-white/10 bg-[#0b0f23] p-3 md:p-4 overflow-hidden`}
 			style={{ transformStyle: "preserve-3d" }}
 		>
 			<p className="absolute left-4 top-4 z-10 font-mono text-lg font-bold text-pink-400">
@@ -420,7 +420,7 @@ interface MobileCardProps {
 
 function MobileCard({ index, label, icon }: MobileCardProps) {
 	return (
-		<div className="relative flex aspect-square w-full cursor-pointer flex-col rounded-xl bg-blue-950 p-3 overflow-hidden">
+		<div className="relative flex aspect-square w-full cursor-pointer flex-col rounded-xl border border-white/10 bg-[#0b0f23] p-3 overflow-hidden">
 			<p className="font-mono text-sm font-bold text-pink-400">
 				{String(index + 1).padStart(2, "0")}
 			</p>
