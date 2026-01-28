@@ -159,19 +159,38 @@ function NavOverlay({
 	onNavigate: (id: string) => void;
 	items: Array<{ id: string; label: string }>;
 }) {
-	if (!isOpen) return null;
+	const [shouldRender, setShouldRender] = useState(isOpen);
+	const [isActive, setIsActive] = useState(isOpen);
+
+	useEffect(() => {
+		if (isOpen) {
+			setShouldRender(true);
+			const raf = requestAnimationFrame(() => setIsActive(true));
+			return () => cancelAnimationFrame(raf);
+		}
+
+		setIsActive(false);
+		const t = window.setTimeout(() => setShouldRender(false), 250);
+		return () => window.clearTimeout(t);
+	}, [isOpen]);
+
+	if (!shouldRender) return null;
 
 	return (
-		<div className="fixed inset-0 z-[60]">
+		<div className={`fixed inset-0 z-[60] ${isActive ? "pointer-events-auto" : "pointer-events-none"}`}>
 			<button
 				type="button"
 				aria-label="Close menu"
-				className="absolute inset-0 bg-black/60"
+				className={`absolute inset-0 bg-black/60 transition-opacity duration-250 ${
+					isActive ? "opacity-100" : "opacity-0"
+				}`}
 				onClick={onClose}
 			/>
 			<div
 				id="site-menu"
-				className="absolute right-0 top-0 h-full w-full max-w-sm bg-[#06081d]  p-6 flex flex-col"
+				className={`absolute right-0 top-0 h-full w-full max-w-sm bg-[#06081d] p-6 flex flex-col transition-all duration-250 ease-out ${
+					isActive ? "translate-x-0 opacity-100" : "translate-x-8 opacity-0"
+				}`}
 			>
 				<div className="flex items-center justify-between">
 					<div className="flex items-center gap-3">
@@ -191,7 +210,7 @@ function NavOverlay({
 							<li key={item.id}>
 								<button
 									type="button"
-									className="w-full text-left rounded-xl px-4 py-3  bg-white/5 text-white/90 hover:bg-white/10 hover:border-white/20 transition-colors"
+									className="inline-flex text-left rounded-xl px-4 py-3 text-xl md:text-2xl font-medium text-white/90 hover:bg-white/10 transition-colors"
 									onClick={() => onNavigate(item.id)}
 								>
 									{item.label}
@@ -199,6 +218,9 @@ function NavOverlay({
 							</li>
 						))}
 					</ul>
+					<div className="mt-8 border-t border-white/10 pt-6 text-sm leading-relaxed text-white/70">
+						Specializing in providing the best marketing solutions, we make a difference with an innovative strategic vision that combines creativity and true partnership. We chart the path to our clients' success in a unique and innovative way, using our young and creative Saudi cadres to achieve 11+/10 high quality that exceeds our clients' expectations
+					</div>
 				</nav>
 				<div className="pt-6 border-t border-white/10 text-sm text-white/70">
 					<div>+966 50 227 6773</div>

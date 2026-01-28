@@ -84,11 +84,11 @@ export function FooterSection() {
 					</h3>
 
 					<div className="mt-8 flex items-center justify-start gap-6">
-						<div className="flex items-center justify-start">
-							<Image src="/logo.svg" alt="11+" width={120} height={40} />
+						<div className="relative w-[120px] h-[40px]">
+							<Image src="/logo.svg" alt="11+" fill className="object-contain" sizes="120px" />
 						</div>
-						<div className="flex items-center justify-start">
-							<Image src="/logo.svg" alt="11+" width={120} height={40} />
+						<div className="relative w-[120px] h-[40px]">
+							<Image src="/tech_logo.svg" alt="Tech Logo" fill className="object-contain" sizes="120px" />
 						</div>
 					</div>
 
