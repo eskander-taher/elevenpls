@@ -120,7 +120,7 @@ export function SocialBar({ socialLinks = defaultSocialLinks }: SocialBarProps) 
 						aria-label="Store"
 						className="relative inline-flex items-center text-white/80 hover:text-white transition-colors duration-300 group"
 					>
-						<span className="w-12 h-12 flex items-center justify-center rounded-full bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300">
+						<span className="w-12 h-12 flex items-center justify-center rounded-full transition-all duration-300 group-hover:scale-110">
 							<span className="text-lg">
 								<FaStore />
 							</span>
@@ -136,7 +136,7 @@ export function SocialBar({ socialLinks = defaultSocialLinks }: SocialBarProps) 
 							target="_blank"
 							rel="noopener noreferrer"
 							aria-label={link.label}
-							className="w-12 h-12 flex items-center justify-center rounded-full bg-white/5 backdrop-blur-sm border border-white/10 text-white/70 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-110"
+							className="w-12 h-12 flex items-center justify-center rounded-full text-white/70 hover:text-white transition-all duration-300 hover:scale-110"
 						>
 							<span className="text-lg">{link.icon}</span>
 						</a>
@@ -146,7 +146,7 @@ export function SocialBar({ socialLinks = defaultSocialLinks }: SocialBarProps) 
 						target="_blank"
 						rel="noopener noreferrer"
 						aria-label="WhatsApp"
-						className="w-14 h-14 flex items-center justify-center rounded-full bg-white/5 backdrop-blur-sm border border-white/10 text-green-500 hover:text-green-400 hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-110"
+						className="w-14 h-14 flex items-center justify-center rounded-full text-green-500 hover:text-green-400 transition-all duration-300 hover:scale-110"
 					>
 						<span className="text-3xl leading-none">
 							<FaWhatsapp />

@@ -187,6 +187,7 @@ export function PartnersSection({
 								<LogoItem
 									key={`row1-${partner.id}-${index}`}
 									partner={partner}
+									isLast={index === duplicatedPartners.length - 1}
 									onMouseEnter={() => (isRow1PausedRef.current = true)}
 									onMouseLeave={() => (isRow1PausedRef.current = false)}
 								/>
@@ -205,6 +206,7 @@ export function PartnersSection({
 								<LogoItem
 									key={`row2-${partner.id}-${index}`}
 									partner={partner}
+									isLast={index === duplicatedReversedPartners.length - 1}
 									onMouseEnter={() => (isRow2PausedRef.current = true)}
 									onMouseLeave={() => (isRow2PausedRef.current = false)}
 								/>
@@ -219,17 +221,19 @@ export function PartnersSection({
 
 function LogoItem({
 	partner,
+	isLast,
 	onMouseEnter,
 	onMouseLeave,
 }: {
 	partner: PartnerLogo;
+	isLast?: boolean;
 	onMouseEnter?: () => void;
 	onMouseLeave?: () => void;
 }) {
 	return (
-		<div className="flex-shrink-0 mx-4 md:mx-6 lg:mx-8 flex items-center justify-center">
+		<div className="relative flex-shrink-0 px-4 md:px-6 lg:px-8 flex items-center justify-center">
 			<div
-				className="w-32 h-20 md:w-40 md:h-24 lg:w-48 lg:h-28 flex items-center justify-center bg-white/5 rounded-lg border border-white/10 backdrop-blur-sm transition-all duration-300 hover:bg-white/10 hover:border-white/20 hover:scale-105 cursor-pointer"
+				className="w-32 h-20 md:w-40 md:h-24 lg:w-48 lg:h-28 flex items-center justify-center transition-transform duration-300 hover:scale-105 cursor-pointer"
 				onMouseEnter={onMouseEnter}
 				onMouseLeave={onMouseLeave}
 			>
@@ -249,6 +253,12 @@ function LogoItem({
 					</span>
 				)}
 			</div>
+			{!isLast && (
+				<div
+					aria-hidden="true"
+					className="absolute right-0 top-1/2 -translate-y-1/2 h-10 md:h-12 lg:h-14 w-px bg-white/15"
+				/>
+			)}
 		</div>
 	);
 }
