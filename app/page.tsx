@@ -8,6 +8,15 @@ import { FiRefreshCw } from "react-icons/fi";
 import { TbChartAreaLine } from "react-icons/tb";
 import { HiOutlineLightBulb } from "react-icons/hi";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
+import {
+	FaFacebook,
+	FaInstagram,
+	FaLinkedin,
+	FaStore,
+	FaTwitter,
+	FaWhatsapp,
+	FaYoutube,
+} from "react-icons/fa";
 import { HeroScrollSection } from "@/components/ui/hero-scroll-section";
 import { ScrollHeader } from "@/components/ui/scroll-header";
 import { ServicesSection } from "@/components/ui/services-section";
@@ -251,6 +260,73 @@ function NavOverlay({
 						</div>
 					</div>
 				</nav>
+				<div className="mt-auto border-t border-white/10 pt-6 flex items-center justify-center">
+					<div className="flex items-center justify-center gap-5">
+						<a
+							href="/store"
+							target="_blank"
+							rel="noopener noreferrer"
+							aria-label="Store"
+							className="text-white/70 hover:text-white transition-colors duration-300"
+						>
+							<FaStore className="text-xl" aria-hidden="true" />
+						</a>
+						<a
+							href="https://instagram.com"
+							target="_blank"
+							rel="noopener noreferrer"
+							aria-label="Instagram"
+							className="text-white/70 hover:text-white transition-colors duration-300"
+						>
+							<FaInstagram className="text-xl" aria-hidden="true" />
+						</a>
+						<a
+							href="https://twitter.com"
+							target="_blank"
+							rel="noopener noreferrer"
+							aria-label="Twitter"
+							className="text-white/70 hover:text-white transition-colors duration-300"
+						>
+							<FaTwitter className="text-xl" aria-hidden="true" />
+						</a>
+						<a
+							href="https://linkedin.com"
+							target="_blank"
+							rel="noopener noreferrer"
+							aria-label="LinkedIn"
+							className="text-white/70 hover:text-white transition-colors duration-300"
+						>
+							<FaLinkedin className="text-xl" aria-hidden="true" />
+						</a>
+						<a
+							href="https://youtube.com"
+							target="_blank"
+							rel="noopener noreferrer"
+							aria-label="YouTube"
+							className="text-white/70 hover:text-white transition-colors duration-300"
+						>
+							<FaYoutube className="text-xl" aria-hidden="true" />
+						</a>
+						<a
+							href="https://facebook.com"
+							target="_blank"
+							rel="noopener noreferrer"
+							aria-label="Facebook"
+							className="text-white/70 hover:text-white transition-colors duration-300"
+						>
+							<FaFacebook className="text-xl" aria-hidden="true" />
+						</a>
+						<a
+							href="https://wa.me/966502276773"
+							target="_blank"
+							rel="noopener noreferrer"
+							aria-label="WhatsApp"
+							className="text-green-500 hover:text-green-400 transition-colors duration-300"
+						>
+							<FaWhatsapp className="text-2xl" aria-hidden="true" />
+						</a>
+					</div>
+				</div>
 			</div>
 		</div>
 	);

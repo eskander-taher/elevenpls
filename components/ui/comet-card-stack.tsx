@@ -85,9 +85,9 @@ export function CometCardStack({
 		>
 			<div className="mx-auto flex-1 flex flex-col justify-center w-full">
 				<div className="max-w-7xl mx-auto w-full">
-					<div className="w-full mb-4 md:mb-6 text-center">
+					<div className="w-full mb-12 md:mb-16 text-center">
 						<h2
-							className="text-4xl md:text-5xl lg:text-6xl font-bold bg-clip-text text-transparent"
+							className="inline-block text-4xl md:text-5xl lg:text-6xl font-bold bg-clip-text text-transparent"
 							style={{
 								backgroundImage:
 									"linear-gradient(to right, white 25%, #ff69b4 50%, #ff1493 100%)",
@@ -95,6 +95,9 @@ export function CometCardStack({
 						>
 							Success Journey
 						</h2>
+						<p className="mt-4 mx-auto w-full max-w-7xl text-sm md:text-base text-white/70 leading-relaxed">
+							We begin by understanding the client's vision and analyzing the market to create an effective strategy that is executed creatively and professionally, and we continue to develop performance to achieve sustainable growth for the brand
+						</p>
 					</div>
 
 					{/* Mobile: Simple grid layout */}
@@ -325,7 +328,7 @@ function HoverStackBar({
 	hoveredCard: CardItem | null;
 }) {
 	return (
-		<div className="absolute left-0 right-0 -bottom-28 pointer-events-none">
+		<div className="absolute left-0 right-0 -bottom-40 pointer-events-none">
 			<AnimatePresence mode="wait">
 				{isInView && hoveredCard ? (
 					<motion.div

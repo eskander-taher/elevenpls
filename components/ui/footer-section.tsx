@@ -7,7 +7,7 @@ export function FooterSection() {
 		<footer className="w-full bg-[#0b0f23] px-4 md:px-8 lg:px-12 py-16 md:py-24 overflow-hidden">
 			<div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
 				<div className="p-6 md:p-10 relative">
-					<div className="w-[200%] h-[200%] bg-[#161628] absolute right-0 -top-20 rounded-4xl rotate-5 z-0 shadow-lg shadow-black/20"></div>
+					<div className="w-[200%] h-[200%] bg-[#161628] absolute right-0 -top-22 rounded-4xl rotate-5 z-0 shadow-[0_30px_80px_rgba(0,0,0,0.55)]"></div>
 					<div className="relative z-10 mb-6">
 						<div className="inline-block">
 							<h3 className="text-2xl md:text-3xl font-semibold text-white">Start your success</h3>
