@@ -109,10 +109,10 @@ export function SocialBar({ socialLinks = defaultSocialLinks }: SocialBarProps) 
 					stiffness: 300,
 					damping: 30,
 				}}
-				className="fixed right-4 md:right-6 lg:right-8 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col items-center gap-4"
+				className="fixed right-4 md:right-6 lg:right-8 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col items-center gap-0"
 			>
 				{/* Social Media Icons */}
-				<div className="flex flex-col gap-2">
+				<div className="flex flex-col gap-0">
 					<a
 						href="/store"
 						target="_blank"
@@ -136,7 +136,7 @@ export function SocialBar({ socialLinks = defaultSocialLinks }: SocialBarProps) 
 							target="_blank"
 							rel="noopener noreferrer"
 							aria-label={link.label}
-							className="w-12 h-12 flex items-center justify-center rounded-full text-white/70 hover:text-white transition-all duration-300 hover:scale-110"
+							className="w-12 h-12 -mt-2 flex items-center justify-center rounded-full text-white/70 hover:text-white transition-all duration-300 hover:scale-110"
 						>
 							<span className="text-lg">{link.icon}</span>
 						</a>
@@ -146,7 +146,7 @@ export function SocialBar({ socialLinks = defaultSocialLinks }: SocialBarProps) 
 						target="_blank"
 						rel="noopener noreferrer"
 						aria-label="WhatsApp"
-						className="w-14 h-14 flex items-center justify-center rounded-full text-green-500 hover:text-green-400 transition-all duration-300 hover:scale-110"
+						className="w-14 h-14 -mt-2 flex items-center justify-center rounded-full text-green-500 hover:text-green-400 transition-all duration-300 hover:scale-110"
 					>
 						<span className="text-3xl leading-none">
 							<FaWhatsapp />
@@ -154,14 +154,18 @@ export function SocialBar({ socialLinks = defaultSocialLinks }: SocialBarProps) 
 					</a>
 				</div>
 
-				{/* Divider */}
-				<div className="w-px h-8 bg-white/10" />
+				<div
+					className="mt-2 mb-10 text-sm font-bold tracking-[0.25em] text-white/70 select-none"
+					style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
+				>
+					Contact us
+				</div>
 
 				{/* Scroll Progress Indicator */}
 				<button
 					onClick={scrollToTop}
 					aria-label="Scroll to top"
-					className="relative w-12 h-12 flex items-center justify-center rounded-full bg-white/5 backdrop-blur-sm border border-white/10 text-white/70 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-110 group"
+					className="relative w-12 h-12 flex items-center justify-center rounded-full text-white/70 hover:text-white transition-all duration-300 hover:scale-110 group cursor-pointer"
 				>
 					{/* Circular Progress SVG */}
 					<svg

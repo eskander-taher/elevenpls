@@ -4,11 +4,25 @@ import Image from "next/image";
 
 export function FooterSection() {
 	return (
-		<footer className="w-full bg-[#0b1033] px-4 md:px-8 lg:px-12 py-16 md:py-24 overflow-hidden">
+		<footer className="w-full bg-[#0b0f23] px-4 md:px-8 lg:px-12 py-16 md:py-24 overflow-hidden">
 			<div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
 				<div className="p-6 md:p-10 relative">
-					<div className="w-[200%] h-[200%] bg-[#070a22] absolute right-0 -top-20 rounded-4xl rotate-5 z-0 shadow-lg shadow-black/20"></div>
-					<h3 className="text-2xl md:text-3xl font-semibold text-white mb-6 relative z-10">Start your success</h3>
+					<div className="w-[200%] h-[200%] bg-[#161628] absolute right-0 -top-20 rounded-4xl rotate-5 z-0 shadow-lg shadow-black/20"></div>
+					<div className="relative z-10 mb-6">
+						<div className="inline-block">
+							<h3 className="text-2xl md:text-3xl font-semibold text-white">Start your success</h3>
+							<div
+								className="mt-3 h-px w-full"
+								style={{
+									backgroundImage:
+										"linear-gradient(to right, white 25%, #ff69b4 50%, #ff1493 100%)",
+								}}
+							/>
+						</div>
+						<p className="mt-5 text-sm md:text-base text-white/70 leading-relaxed">
+							We begin by understanding the client's vision and analyzing the market to create an effective strategy that is executed creatively and professionally, and we continue to develop performance to achieve sustainable growth for the brand
+						</p>
+					</div>
 					<form className="space-y-4 relative z-10">
 						<div>
 							<label className="block text-sm text-white/80 mb-2">Name</label>

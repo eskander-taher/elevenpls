@@ -156,20 +156,6 @@ export function PartnersSection({
 	return (
 		<section className="w-full py-16 md:py-24 px-4 md:px-8 lg:px-12 overflow-hidden">
 			<div className="max-w-7xl mx-auto">
-				{/* Section Title */}
-				<div className="w-full mb-12 md:mb-16 text-left">
-					<h2 className="text-sm md:text-base font-normal text-white/80 mb-2">our</h2>
-					<h2
-						className="text-4xl md:text-5xl lg:text-6xl font-bold bg-clip-text text-transparent"
-						style={{
-							backgroundImage:
-								"linear-gradient(to right, white 5%, #ff69b4 15%, #ff1493 100%)",
-						}}
-					>
-						Partners
-					</h2>
-				</div>
-
 				{/* Carousel Container with Gradient Masks */}
 				<div className="relative">
 					{/* Gradient Masks - fade edges */}

@@ -85,12 +85,12 @@ export function CometCardStack({
 		>
 			<div className="mx-auto flex-1 flex flex-col justify-center w-full">
 				<div className="max-w-7xl mx-auto w-full">
-					<div className="w-full mb-4 md:mb-6 text-left">
+					<div className="w-full mb-4 md:mb-6 text-center">
 						<h2
 							className="text-4xl md:text-5xl lg:text-6xl font-bold bg-clip-text text-transparent"
 							style={{
 								backgroundImage:
-									"linear-gradient(to right, white 5%, #ff69b4 15%, #ff1493 100%)",
+									"linear-gradient(to right, white 25%, #ff69b4 50%, #ff1493 100%)",
 							}}
 						>
 							Success Journey

@@ -7,7 +7,7 @@ import { IoColorPaletteOutline } from "react-icons/io5";
 import { FiRefreshCw } from "react-icons/fi";
 import { TbChartAreaLine } from "react-icons/tb";
 import { HiOutlineLightBulb } from "react-icons/hi";
-import { HiMenuAlt3 } from "react-icons/hi";
+import { HiMenuAlt3, HiX } from "react-icons/hi";
 import { HeroScrollSection } from "@/components/ui/hero-scroll-section";
 import { ScrollHeader } from "@/components/ui/scroll-header";
 import { ServicesSection } from "@/components/ui/services-section";
@@ -54,7 +54,6 @@ const cards: CardItem[] = [
 	},
 ];
 
-
 const answers = [
 	"We craft digital experiences",
 	"Strategy-driven design",
@@ -66,54 +65,55 @@ const services = [
 	{
 		id: "01",
 		title: "Branding",
-		description: "Brand strategy & analysis, brand story & goals, targeted audience and market, logo concept & design, brand identity, administrative and official documents, digital templates and promotional prints, brand business profile",
+		description:
+			"Brand strategy & analysis, brand story & goals, targeted audience and market, logo concept & design, brand identity, administrative and official documents, digital templates and promotional prints, brand business profile",
 		image: "/frames/Frame_0001.jpeg",
 	},
 	{
 		id: "02",
 		title: "Marketing Consultations",
-		description: "We provide a comprehensive analysis of the market, competitors, and customers, grounded in accurate data and realistic understandings of your brand, position and dynamics within the market.",
+		description:
+			"We provide a comprehensive analysis of the market, competitors, and customers, grounded in accurate data and realistic understandings of your brand, position and dynamics within the market.",
 		image: "/frames/Frame_0002.jpeg",
 	},
 	{
 		id: "03",
 		title: "Digital Marketing",
-		description: "Marketing strategies and plans, social media management, graphic design & Reels, motion graphic 2D & 3D, infographics, ads management SMM, SEO & SEM, marketing campaigns & media buying, periodic reporting",
+		description:
+			"Marketing strategies and plans, social media management, graphic design & Reels, motion graphic 2D & 3D, infographics, ads management SMM, SEO & SEM, marketing campaigns & media buying, periodic reporting",
 		image: "/frames/Frame_0003.jpeg",
 	},
 	{
 		id: "04",
 		title: "Content Creation",
-		description: "Writing creative content, visual content, audio content, interactive content, trending content, static visual content",
+		description:
+			"Writing creative content, visual content, audio content, interactive content, trending content, static visual content",
 		image: "/frames/Frame_0004.jpeg",
 	},
 	{
 		id: "05",
 		title: "Technology Solutions",
-		description: "Website development, application development, front-end, back-end, UI/UX, automation",
+		description:
+			"Website development, application development, front-end, back-end, UI/UX, automation",
 		image: "/frames/Frame_0005.jpeg",
 	},
 	{
 		id: "06",
 		title: "Photography",
-		description: "Portrait photography, corporate photography, food photography, product photography, architectural photography, events coverage",
+		description:
+			"Portrait photography, corporate photography, food photography, product photography, architectural photography, events coverage",
 		image: "/frames/Frame_0006.jpeg",
 	},
 	{
 		id: "07",
 		title: "Video Production",
-		description: "Commercial & TV video production, film production, documentaries, events media coverage, video editing, sound record & sound design, motion graphic 2D & 3D, animation",
+		description:
+			"Commercial & TV video production, film production, documentaries, events media coverage, video editing, sound record & sound design, motion graphic 2D & 3D, animation",
 		image: "/frames/Frame_0007.jpeg",
 	},
 ];
 
-function Header({
-	onMenuOpen,
-	menuOpen,
-}: {
-	onMenuOpen: () => void;
-	menuOpen: boolean;
-}) {
+function Header({ onMenuOpen, menuOpen }: { onMenuOpen: () => void; menuOpen: boolean }) {
 	return (
 		<ScrollHeader>
 			<div className="flex items-center">
@@ -159,6 +159,7 @@ function NavOverlay({
 	onNavigate: (id: string) => void;
 	items: Array<{ id: string; label: string }>;
 }) {
+	const [language, setLanguage] = useState<"English" | "عربي">("English");
 	const [shouldRender, setShouldRender] = useState(isOpen);
 	const [isActive, setIsActive] = useState(isOpen);
 
@@ -177,7 +178,9 @@ function NavOverlay({
 	if (!shouldRender) return null;
 
 	return (
-		<div className={`fixed inset-0 z-[60] ${isActive ? "pointer-events-auto" : "pointer-events-none"}`}>
+		<div
+			className={`fixed inset-0 z-[60] ${isActive ? "pointer-events-auto" : "pointer-events-none"}`}
+		>
 			<button
 				type="button"
 				aria-label="Close menu"
@@ -193,39 +196,61 @@ function NavOverlay({
 				}`}
 			>
 				<div className="flex items-center justify-between">
-					<div className="flex items-center gap-3">
-						<Image src="/logo.svg" alt="11+" width={64} height={28} className="h-7 w-auto" />
+					<div className="flex items-center justify-start">
+						<button
+							type="button"
+							aria-label="Close menu"
+							className="p-2 text-pink-500 hover:text-pink-400 transition-colors"
+							onClick={onClose}
+						>
+							<HiX className="w-8 h-8" />
+						</button>
 					</div>
-					<button
-						type="button"
-						className="rounded-full border border-white/15 px-3 py-1.5 text-sm text-white/80 hover:text-white hover:border-white/25 transition-colors"
-						onClick={onClose}
-					>
-						Close
-					</button>
+					<div className="flex items-center gap-4">
+						<div id="b" className="cta-button hidden sm:flex" role="button">
+							<span className="cta-primary">Start your success</span>
+							<span className="cta-secondary" aria-hidden="true">
+								<span>Talk with Ali, Sales of 11+</span>
+							</span>
+						</div>
+					</div>
+					<div className="flex items-center justify-end">
+						<button
+							type="button"
+							aria-label="Language"
+							className="px-2 py-2 text-sm font-medium text-white/80 hover:text-white transition-colors"
+							onClick={() =>
+								setLanguage((prev) => (prev === "English" ? "عربي" : "English"))
+							}
+						>
+							{language}
+						</button>
+					</div>
 				</div>
-				<nav className="mt-12 flex-1">
-					<ul className="space-y-4 lg:space-y-6">
-						{items.map((item) => (
-							<li key={item.id}>
-								<button
-									type="button"
-									className="inline-flex text-left rounded-2xl px-5 py-4 lg:px-7 lg:py-5 text-2xl md:text-3xl lg:text-4xl font-medium text-white/90 hover:bg-white/10 transition-colors"
-									onClick={() => onNavigate(item.id)}
-								>
-									{item.label}
-								</button>
-							</li>
-						))}
-					</ul>
-					<div className="mt-10 border-t border-white/10 pt-8 text-sm md:text-base leading-relaxed text-white/70">
-						Specializing in providing the best marketing solutions, we make a difference with an innovative strategic vision that combines creativity and true partnership. We chart the path to our clients' success in a unique and innovative way, using our young and creative Saudi cadres to achieve 11+/10 high quality that exceeds our clients' expectations
+				<nav className="flex-1 w-full flex items-center">
+					<div className="w-full max-w-md lg:max-w-lg mx-auto">
+						<ul className="space-y-3 lg:space-y-4 pl-2 md:pl-4">
+							{items.map((item) => (
+								<li key={item.id}>
+									<button
+										type="button"
+										className="flex w-full text-left justify-start rounded-2xl px-5 py-3 lg:px-7 lg:py-4 text-2xl md:text-3xl lg:text-4xl font-medium text-white/90 hover:bg-white/10 transition-colors cursor-pointer"
+										onClick={() => onNavigate(item.id)}
+									>
+										{item.label}
+									</button>
+								</li>
+							))}
+						</ul>
+						<div className="mt-8 border-t border-white/10 pt-6 text-sm md:text-base leading-relaxed text-white/70 pl-2 md:pl-4">
+							Specializing in providing the best marketing solutions, we make a
+							difference with an innovative strategic vision that combines creativity
+							and true partnership. We chart the path to our clients' success in a
+							unique and innovative way, using our young and creative Saudi cadres to
+							achieve 11+/10 high quality that exceeds our clients' expectations
+						</div>
 					</div>
 				</nav>
-				<div className="pt-6 border-t border-white/10 text-sm text-white/70">
-					<div>+966 50 227 6773</div>
-					<div>Sales@elevenpls.com</div>
-				</div>
 			</div>
 		</div>
 	);
@@ -236,7 +261,7 @@ function QuestionText() {
 		<h1
 			className="text-6xl md:text-8xl font-bold tracking-tight bg-clip-text text-transparent py-2 text-center"
 			style={{
-				backgroundImage: "linear-gradient(to right, white 10%, #ff69b4 40%, #ff1493 100%)",
+				backgroundImage: "linear-gradient(to right, white 25%, #ff69b4 50%, #ff1493 100%)",
 			}}
 		>
 			WHY 11+?
@@ -255,7 +280,7 @@ export default function Home() {
 			{ id: "partners", label: "Partners" },
 			{ id: "contact", label: "Contact" },
 		],
-		[]
+		[],
 	);
 
 	// Scroll to top on page load/refresh
