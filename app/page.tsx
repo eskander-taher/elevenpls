@@ -237,13 +237,13 @@ function NavOverlay({
 					</div>
 				</div>
 				<nav className="flex-1 w-full flex items-center">
-					<div className="w-full max-w-md lg:max-w-lg mx-auto">
-						<ul className="space-y-3 lg:space-y-4 pl-2 md:pl-4">
+					<div className="w-full">
+						<ul className="space-y-3 lg:space-y-4">
 							{items.map((item) => (
 								<li key={item.id}>
 									<button
 										type="button"
-										className="flex w-full text-left justify-start rounded-2xl px-5 py-3 lg:px-7 lg:py-4 text-2xl md:text-3xl lg:text-4xl font-medium text-white/90 hover:bg-white/10 transition-colors cursor-pointer"
+										className="flex w-[calc(100%+48px)] -ml-6 justify-start py-3 lg:py-4 pl-[15%] pr-6 text-2xl md:text-3xl lg:text-4xl font-medium text-white/90 hover:bg-white/10 transition-colors cursor-pointer"
 										onClick={() => onNavigate(item.id)}
 									>
 										{item.label}
@@ -251,16 +251,19 @@ function NavOverlay({
 								</li>
 							))}
 						</ul>
-						<div className="mt-8 border-t border-white/10 pt-6 text-sm md:text-base leading-relaxed text-white/70 pl-2 md:pl-4">
-							Specializing in providing the best marketing solutions, we make a
-							difference with an innovative strategic vision that combines creativity
-							and true partnership. We chart the path to our clients' success in a
-							unique and innovative way, using our young and creative Saudi cadres to
-							achieve 11+/10 high quality that exceeds our clients' expectations
+						<div className="mt-8 w-[calc(100%+48px)] -ml-6">
+							<div className="h-px bg-white/10 w-[calc(100%-15%)] ml-[15%]" />
+							<div className="pt-6 pl-[15%] pr-6 text-sm md:text-base leading-relaxed text-white/70">
+								Specializing in providing the best marketing solutions, we make a
+								difference with an innovative strategic vision that combines creativity
+								and true partnership. We chart the path to our clients' success in a
+								unique and innovative way, using our young and creative Saudi cadres to
+								achieve 11+/10 high quality that exceeds our clients' expectations
+							</div>
 						</div>
 					</div>
 				</nav>
-				<div className="mt-auto border-t border-white/10 pt-6 flex items-center justify-center">
+				<div className="mt-auto w-[calc(100%+48px)] -ml-6 border-t border-white/10 px-6 pt-6 flex items-center justify-center">
 					<div className="flex items-center justify-center gap-5">
 						<a
 							href="/store"
